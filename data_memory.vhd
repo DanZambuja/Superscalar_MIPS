@@ -2,13 +2,16 @@ library IEEE;
 use IEEE.STD_LOGIC_1164.all; use STD.TEXTIO.all;
 use IEEE.NUMERIC_STD_UNSIGNED.all; 
 
-entity dmem is -- data memory
-  port(clk, we:  in STD_LOGIC;
-       a, wd:    in STD_LOGIC_VECTOR(31 downto 0);
-       rd:       out STD_LOGIC_VECTOR(31 downto 0));
+entity Data_Memory is -- data memory
+  port(
+    CLK, WE_A, WE_B, WE_C  :  in STD_LOGIC;
+    WA_A, WA_B, WA_C       :  in STD_LOGIC_VECTOR(4 downto 0);
+    WD_A, WD_B, WD_C       :  in STD_LOGIC_VECTOR(31 downto 0);
+    RD_A, RD_B, RD_C       :  out STD_LOGIC_VECTOR(31 downto 0)
+  );
 end;
 
-architecture behave of dmem is
+architecture behave of Data_Memory is
 begin
   process is
     type ramtype is array (63 downto 0) of STD_LOGIC_VECTOR(31 downto 0);

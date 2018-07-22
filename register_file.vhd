@@ -1,20 +1,20 @@
  library IEEE; use IEEE.STD_LOGIC_1164.all; 
     use IEEE.NUMERIC_STD_UNSIGNED.all;
     
-    entity regfile is -- three-port register file
-      port(clk:           in  STD_LOGIC;
-           we3, we6, we9: in  STD_LOGIC; --write enable
-           ra1, ra2: in STD_LOGIC_VECTOR(4 downto 0); -- register selector for ULA 1
-           ra3, ra4: in STD_LOGIC_VECTOR(4 downto 0);-- register selector for ULA 2
-           ra5, ra6: in STD_LOGIC_VECTOR(4 downto 0);-- register selector for ULA 3
-           wa3, wa6, wa9: in  STD_LOGIC_VECTOR(4 downto 0); -- register selector for write operation
-           wd3, wd6, wd9: in  STD_LOGIC_VECTOR(31 downto 0); -- data to be writen
-           rd1, rd2: out STD_LOGIC_VECTOR(31 downto 0)); -- output data for ULA 1
-           rd3, rd4: out STD_LOGIC_VECTOR(31 downto 0)); -- output data for ULA 2
-           rd5, rd6: out STD_LOGIC_VECTOR(31 downto 0)); -- output data for ULA 3
+    entity Register_File is
+      port(CLK:           in  STD_LOGIC;
+           WE_A, WE_B, WE_C: in  STD_LOGIC; --write enable
+           RA1_A, RA2_A: in STD_LOGIC_VECTOR(4 downto 0); -- register selector for ULA 1
+           RA1_B, RA2_B: in STD_LOGIC_VECTOR(4 downto 0); -- register selector for ULA 2
+           RA1_C, RA2_C: in STD_LOGIC_VECTOR(4 downto 0); -- register selector for ULA 3
+           WA_A, WA_B, WA_C: in  STD_LOGIC_VECTOR(4 downto 0); -- register selector for write operation
+           WD_A, WD_B, WD_C: in  STD_LOGIC_VECTOR(31 downto 0); -- data to be writen
+           RD1_A, RD2_A: out STD_LOGIC_VECTOR(31 downto 0)); -- output data for ULA 1
+           RD1_B, RD2_B: out STD_LOGIC_VECTOR(31 downto 0)); -- output data for ULA 2
+           RD1_C, RD2_C: out STD_LOGIC_VECTOR(31 downto 0)); -- output data for ULA 3
     end;
     
-    architecture behave of regfile is
+    architecture Behavioral of Register_File is
       type ramtype is array (31 downto 0) of STD_LOGIC_VECTOR(31 downto 0);
       signal mem: ramtype;
     begin
@@ -24,34 +24,34 @@
       -- register 0 hardwired to 0
       -- note: for pipelined processor, write third port
       -- on falling edge of clk
-      process(clk) begin
-        if rising_edge(clk) then
-           if we3 = '1' then mem(to_integer(wa3)) <= wd3;
+      process(CLK) begin
+        if rising_edge(CLK) then
+           if WE_A = '1' then mem(to_integer(WA_A)) <= WD_A;
            end if;
-           if we6 = '1' then mem(to_integer(wa3)) <= wd6;
+           if WE_B = '1' then mem(to_integer(WA_B)) <= WD_B;
            end if;
-           if we9 = '1' then mem(to_integer(wa3)) <= wd9;
+           if WE_C = '1' then mem(to_integer(WA_C)) <= WD_C;
            end if;
         end if;
       end process;
-      process(all) begin
-        if (to_integer(ra1) = 0) then rd1 <= X"00000000"; -- register 0 holds 0
-           else rd1 <= mem(to_integer(ra1));
+      process(all) begin -- register 0 hardcoded to 0 due to usage frequency
+        if (to_integer(RA1_A) = 0) then RD1_A <= X"00000000";
+           else RD1_A <= mem(to_integer(RA1_A));
         end if;
-        if (to_integer(ra2) = 0) then rd2 <= X"00000000"; 
-           else rd2 <= mem(to_integer(ra2));
+        if (to_integer(RA2_A) = 0) then RD2_A <= X"00000000"; 
+           else RD2_A <= mem(to_integer(RA2_A));
         end if;
-        if (to_integer(ra3) = 0) then rd3 <= X"00000000";
-           else rd3 <= mem(to_integer(ra3));
+        if (to_integer(RA1_B) = 0) then RD1_B <= X"00000000";
+           else RD1_B <= mem(to_integer(RA1_B));
         end if;
-        if (to_integer(ra4) = 0) then rd4 <= X"00000000"; 
-           else rd4 <= mem(to_integer(ra4));
+        if (to_integer(RA2_B) = 0) then RD2_B <= X"00000000"; 
+           else RD2_B <= mem(to_integer(RA2_B));
         end if;
-        if (to_integer(ra5) = 0) then rd5 <= X"00000000";
-           else rd5 <= mem(to_integer(ra5));
+        if (to_integer(RA1_C) = 0) then RD1_C <= X"00000000";
+           else RD1_C <= mem(to_integer(RA1_C));
         end if;
-        if (to_integer(ra6) = 0) then rd6 <= X"00000000"; 
-           else rd6 <= mem(to_integer(ra6));
+        if (to_integer(RA2_C) = 0) then RD2_C <= X"00000000"; 
+           else RD2_C <= mem(to_integer(RA2_C));
         end if;
       end process;
     end;
