@@ -2,13 +2,13 @@ library IEEE;
 use IEEE.STD_LOGIC_1164.all; use STD.TEXTIO.all;
 use IEEE.NUMERIC_STD_UNSIGNED.all;  
 
-entity imem is -- instruction memory
-  port(a:  in  STD_LOGIC_VECTOR(5 downto 0);
+entity Instruction_Memory is -- instruction memory
+  port(limited_PC:  in  STD_LOGIC_VECTOR(5 downto 0);
        instruction_A, instruction_B, instruction_C: out STD_LOGIC_VECTOR(31 downto 0)
        );
 end;
 
-architecture behave of imem is
+architecture behave of Instruction_Memory is
 begin
   process is
     file mem_file: TEXT;
@@ -45,10 +45,10 @@ begin
 
     -- read memory
     loop
-      instruction_A <= mem(to_integer(a));
-      instruction_B <= mem(to_integer(a+4));
-      instruction_C <= mem(to_integer(a+8));
-      wait on a;
+      instruction_A <= mem(to_integer(limited_PC));
+      instruction_B <= mem(to_integer(limited_PC+4));
+      instruction_C <= mem(to_integer(limited_PC+8));
+      wait on limited_PC;
     end loop;
   end process;
 end;

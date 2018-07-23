@@ -1,6 +1,6 @@
   library IEEE; use IEEE.STD_LOGIC_1164.all;
   
-  entity maindec is -- main control decoder
+  entity Main_Decoder is -- main control decoder
     port(op:                 in  STD_LOGIC_VECTOR(5 downto 0);
          memtoreg, memwrite: out STD_LOGIC;
          branch, alusrc:     out STD_LOGIC;
@@ -10,7 +10,7 @@
          bneq:               out STD_LOGIC);
   end;
   
-  architecture behave of maindec is
+  architecture behave of Main_Decoder is
     signal controls: STD_LOGIC_VECTOR(9 downto 0);
   begin
     process(all) begin
