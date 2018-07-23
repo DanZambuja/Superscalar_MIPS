@@ -39,6 +39,15 @@ architecture hierarchical of Superscalar is
         );
     end component;
 
+    component mux2 
+        generic(width: integer);
+        port(
+            d0, d1: in  STD_LOGIC_VECTOR(width-1 downto 0);
+            s:      in  STD_LOGIC;
+            y:      out STD_LOGIC_VECTOR(width-1 downto 0)
+        );
+    end component;
+
     signal instr_A, instr_B, instr_C             : STD_LOGIC_VECTOR(31 downto 0);
     signal data_A, data_B, data_C                : STD_LOGIC_VECTOR(31 downto 0);
     signal reg_data1_A, reg_data1_B, reg_data1_C : STD_LOGIC_VECTOR(31 downto 0);
@@ -61,5 +70,6 @@ begin
 
     instr_mem   : instruction_memory port map(PC(7 downto 2), instr_A, instr_B, instr_C);
 
+    
 
 end;
