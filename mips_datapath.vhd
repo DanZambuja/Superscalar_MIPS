@@ -21,14 +21,6 @@ architecture struct of datapath is
          zero:       out STD_LOGIC);
   end component;
 
-  component regfile
-    port(clk:           in  STD_LOGIC;
-         we3:           in  STD_LOGIC;
-         ra1, ra2, wa3: in  STD_LOGIC_VECTOR(4 downto 0);
-         wd3:           in  STD_LOGIC_VECTOR(31 downto 0);
-         rd1, rd2:      out STD_LOGIC_VECTOR(31 downto 0));
-  end component;
-
   component adder
     port(a, b: in  STD_LOGIC_VECTOR(31 downto 0);
          y:    out STD_LOGIC_VECTOR(31 downto 0));
