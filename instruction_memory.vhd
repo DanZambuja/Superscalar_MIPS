@@ -4,7 +4,8 @@ use IEEE.NUMERIC_STD_UNSIGNED.all;
 
 entity imem is -- instruction memory
   port(a:  in  STD_LOGIC_VECTOR(5 downto 0);
-       rd: out STD_LOGIC_VECTOR(31 downto 0));
+       instruction_A, instruction_B, instruction_C: out STD_LOGIC_VECTOR(31 downto 0)
+       );
 end;
 
 architecture behave of imem is
@@ -25,24 +26,28 @@ begin
     FILE_OPEN(mem_file, "C:/docs/DDCA2e/hdl/memfile.dat", READ_MODE);
     while not endfile(mem_file) loop
       readline(mem_file, L);
-      result := 0;	
-      for i in 1 to 8 loop
-        read(L, ch);
-        if '0' <= ch and ch <= '9' then 
-            result := character'pos(ch) - character'pos('0');
-        elsif 'a' <= ch and ch <= 'f' then
-           result := character'pos(ch) - character'pos('a')+10;
-        else report "Format error on line " & integer'image(index)
-             severity error;
-        end if;
-        mem(index)(35-i*4 downto 32-i*4) :=to_std_logic_vector(result,4);
+      result := 0;
+      for j in 1 to 3 loop
+        for i in 1 to 8 loop
+          read(L, ch);
+          if '0' <= ch and ch <= '9' then 
+              result := character'pos(ch) - character'pos('0');
+          elsif 'a' <= ch and ch <= 'f' then
+             result := character'pos(ch) - character'pos('a')+10;
+          else report "Format error on line " & integer'image(index)
+               severity error;
+          end if;
+          mem(index)(35-i*4 downto 32-i*4) :=to_std_logic_vector(result,4);
+        end loop;
+        index := index + 1;
       end loop;
-      index := index + 1;
     end loop;
 
     -- read memory
     loop
-      rd <= mem(to_integer(a));
+      instruction_A <= mem(to_integer(a));
+      instruction_B <= mem(to_integer(a+4));
+      instruction_C <= mem(to_integer(a+8));
       wait on a;
     end loop;
   end process;

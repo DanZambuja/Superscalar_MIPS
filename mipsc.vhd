@@ -81,7 +81,7 @@ architecture test of testbench is
     -- instantiate processor and memories
     mips1: mips port map(clk, reset, pc, instr, memwrite, dataadr, 
                          writedata, readdata);
-    imem1: imem port map(pc(7 downto 2), instr);
+    imem1: imem port map(pc(7 downto 2), instr); -- pc(7 downto 2) is a way of limiting the number of instructions read from the instruction memory
     dmem1: dmem port map(clk, memwrite, dataadr, writedata, readdata);
   end;
   
