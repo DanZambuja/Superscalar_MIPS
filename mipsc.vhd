@@ -58,30 +58,34 @@ architecture test of testbench is
   end;
   
   architecture test of top is
-    component mips 
-      port(clk, reset:        in  STD_LOGIC;
-           pc:                out STD_LOGIC_VECTOR(31 downto 0);
-           instr:             in  STD_LOGIC_VECTOR(31 downto 0);
-           memwrite:          out STD_LOGIC;
-           aluout, writedata: out STD_LOGIC_VECTOR(31 downto 0);
-           readdata:          in  STD_LOGIC_VECTOR(31 downto 0));
+    component MIPS 
+      port(clk, reset:                in  STD_LOGIC;
+           pc:                        out STD_LOGIC_VECTOR(31 downto 0);
+           instr_A, instr_B, instr_C: in  STD_LOGIC_VECTOR(31 downto 0);
+           memwrite:                  out STD_LOGIC;
+           aluout, writedata:         out STD_LOGIC_VECTOR(31 downto 0);
+           readdata:                  in  STD_LOGIC_VECTOR(31 downto 0));
     end component;
-    component imem
+
+    component Instruction_Memory
       port(a:  in  STD_LOGIC_VECTOR(5 downto 0);
-           rd: out STD_LOGIC_VECTOR(31 downto 0));
+           instruction_A, instruction_B, instruction_C: out STD_LOGIC_VECTOR(31 downto 0));
     end component;
-    component dmem
+
+    component Data_Memory
       port(clk, we:  in STD_LOGIC;
            a, wd:    in STD_LOGIC_VECTOR(31 downto 0);
            rd:       out STD_LOGIC_VECTOR(31 downto 0));
     end component;
-    signal pc, instr, 
+
+    signal pc, instr_A, instr_B, instr_C,
            readdata: STD_LOGIC_VECTOR(31 downto 0);
+
   begin
     -- instantiate processor and memories
     mips1: mips port map(clk, reset, pc, instr, memwrite, dataadr, 
                          writedata, readdata);
-    imem1: imem port map(pc(7 downto 2), instr); -- pc(7 downto 2) is a way of limiting the number of instructions read from the instruction memory
+    imem1: imem port map(pc(7 downto 2), instr_A, instr_B, instr_C); -- pc(7 downto 2) is a way of limiting the number of instructions read from the instruction memory
     dmem1: dmem port map(clk, memwrite, dataadr, writedata, readdata);
   end;
   

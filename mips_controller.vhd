@@ -1,6 +1,6 @@
 library IEEE; use IEEE.STD_LOGIC_1164.all;
   
-  entity controller is -- single cycle control decoder
+  entity Controller is -- single cycle control decoder
     port(op, funct:          in  STD_LOGIC_VECTOR(5 downto 0);
          zero:               in  STD_LOGIC;
          memtoreg, memwrite: out STD_LOGIC;
@@ -11,8 +11,8 @@ library IEEE; use IEEE.STD_LOGIC_1164.all;
   end;
   
   
-  architecture struct of controller is
-    component maindec
+  architecture struct of Controller is
+    component Main_Decoder
       port(op:                 in  STD_LOGIC_VECTOR(5 downto 0);
            memtoreg, memwrite: out STD_LOGIC;
            branch, alusrc:     out STD_LOGIC;
@@ -21,7 +21,7 @@ library IEEE; use IEEE.STD_LOGIC_1164.all;
            aluop:              out STD_LOGIC_VECTOR(1 downto 0);
            bneq:               out STD_LOGIC);
     end component;
-    component aludec
+    component ALU_Decoder
       port(funct:      in  STD_LOGIC_VECTOR(5 downto 0);
            aluop:      in  STD_LOGIC_VECTOR(1 downto 0);
            alucontrol: out STD_LOGIC_VECTOR(2 downto 0));
@@ -30,9 +30,9 @@ library IEEE; use IEEE.STD_LOGIC_1164.all;
     signal branch: STD_LOGIC;
     signal bneq: STD_LOGIC;
   begin
-    md: maindec port map(op, memtoreg, memwrite, branch,
+    md: Main_Decoder port map(op, memtoreg, memwrite, branch,
                          alusrc, regdst, regwrite, jump, aluop, bneq);
-    ad: aludec port map(funct, aluop, alucontrol);
+    ad: ALU_Decoder port map(funct, aluop, alucontrol);
   
     pcsrc <= (branch and zero) or (bneq and not zero);
   end;
