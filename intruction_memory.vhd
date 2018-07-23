@@ -2,13 +2,13 @@ library IEEE;
 use IEEE.STD_LOGIC_1164.all; use STD.TEXTIO.all;
 use IEEE.NUMERIC_STD_UNSIGNED.all;  
 
-entity imem is -- instruction memory
+entity Instruction_Memory is -- instruction memory
   port(limited_PC:  in  STD_LOGIC_VECTOR(5 downto 0);
        instruction_A, instruction_B, instruction_C: out STD_LOGIC_VECTOR(31 downto 0)
        );
 end;
 
-architecture behave of imem is
+architecture behave of Instruction_Memory is
 begin
   process is
     file mem_file: TEXT;

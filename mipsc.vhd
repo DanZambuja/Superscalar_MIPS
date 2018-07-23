@@ -58,7 +58,7 @@ architecture test of testbench is
   end;
   
   architecture test of top is
-    component mips 
+    component MIPS 
       port(clk, reset:                in  STD_LOGIC;
            pc:                        out STD_LOGIC_VECTOR(31 downto 0);
            instr_A, instr_B, instr_C: in  STD_LOGIC_VECTOR(31 downto 0);
@@ -67,12 +67,12 @@ architecture test of testbench is
            readdata:                  in  STD_LOGIC_VECTOR(31 downto 0));
     end component;
 
-    component imem
+    component Instruction_Memory
       port(a:  in  STD_LOGIC_VECTOR(5 downto 0);
            instruction_A, instruction_B, instruction_C: out STD_LOGIC_VECTOR(31 downto 0));
     end component;
 
-    component dmem
+    component Data_Memory
       port(clk, we:  in STD_LOGIC;
            a, wd:    in STD_LOGIC_VECTOR(31 downto 0);
            rd:       out STD_LOGIC_VECTOR(31 downto 0));
