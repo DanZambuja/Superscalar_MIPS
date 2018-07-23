@@ -20,6 +20,7 @@ architecture struct of datapath is
          result:     buffer STD_LOGIC_VECTOR(31 downto 0);
          zero:       out STD_LOGIC);
   end component;
+
   component regfile
     port(clk:           in  STD_LOGIC;
          we3:           in  STD_LOGIC;
@@ -27,34 +28,41 @@ architecture struct of datapath is
          wd3:           in  STD_LOGIC_VECTOR(31 downto 0);
          rd1, rd2:      out STD_LOGIC_VECTOR(31 downto 0));
   end component;
+
   component adder
     port(a, b: in  STD_LOGIC_VECTOR(31 downto 0);
          y:    out STD_LOGIC_VECTOR(31 downto 0));
   end component;
+
   component sl2
     port(a: in  STD_LOGIC_VECTOR(31 downto 0);
          y: out STD_LOGIC_VECTOR(31 downto 0));
   end component;
+
   component signext
     port(a: in  STD_LOGIC_VECTOR(15 downto 0);
          y: out STD_LOGIC_VECTOR(31 downto 0));
   end component;
+
   component flopr generic(width: integer);
     port(clk, reset: in  STD_LOGIC;
          d:          in  STD_LOGIC_VECTOR(width-1 downto 0);
          q:          out STD_LOGIC_VECTOR(width-1 downto 0));
   end component;
+
   component mux2 generic(width: integer);
     port(d0, d1: in  STD_LOGIC_VECTOR(width-1 downto 0);
          s:      in  STD_LOGIC;
          y:      out STD_LOGIC_VECTOR(width-1 downto 0));
   end component;
+
   signal writereg:           STD_LOGIC_VECTOR(4 downto 0);
   signal pcjump, pcnext, 
          pcnextbr, pcplus4, 
          pcbranch:           STD_LOGIC_VECTOR(31 downto 0);
   signal signimm, signimmsh: STD_LOGIC_VECTOR(31 downto 0);
   signal srca, srcb, result: STD_LOGIC_VECTOR(31 downto 0);
+  
 begin
   -- next PC logic
   pcjump <= pcplus4(31 downto 28) & instr(25 downto 0) & "00";

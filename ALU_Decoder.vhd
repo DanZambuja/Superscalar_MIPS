@@ -22,7 +22,7 @@
                            when "100101" => alucontrol <= "001"; -- or
                            when "101010" => alucontrol <= "111"; -- slt
                            when others   => alucontrol <= "---"; -- ???
-                       end case;
+        end case;
       end case;
     end process;
   end;
