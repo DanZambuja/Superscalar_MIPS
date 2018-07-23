@@ -20,11 +20,17 @@ begin
     -- read or write memory
     loop
       if clk'event and clk = '1' then
-          if (we = '1') then mem(to_integer(a(7 downto 2))) := wd;
+          if (WE_A = '1') then mem(to_integer(WA_A)) := WD_A;
+          end if;
+          if (WE_B = '1') then mem(to_integer(WA_B)) := WD_B;
+          end if;
+          if (WE_C = '1') then mem(to_integer(WA_C)) := WD_C;
           end if;
       end if;
-      rd <= mem(to_integer(a(7 downto 2))); 
-      wait on clk, a;
+      RD_A <= mem(to_integer(WA_A));
+      RD_B <= mem(to_integer(WA_B)); 
+      RD_C <= mem(to_integer(WA_C)); 
+      wait on CLK, WA_A;
     end loop;
 
   end process;
