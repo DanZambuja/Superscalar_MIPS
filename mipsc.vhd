@@ -54,6 +54,7 @@ architecture test of testbench is
   entity top is -- top-level design for testing
     port(clk, reset:           in     STD_LOGIC;
          writedata, dataadr:   buffer STD_LOGIC_VECTOR(31 downto 0);
+         ula_source_1, ula_source_2:   in STD_LOGIC_VECTOR(31 downto 0);
          memwrite:             buffer STD_LOGIC);
   end;
   
@@ -97,6 +98,7 @@ architecture test of testbench is
          instr:             in  STD_LOGIC_VECTOR(31 downto 0);
          memwrite:          out STD_LOGIC;
          aluout, writedata: out STD_LOGIC_VECTOR(31 downto 0);
+         ula_source_1, ula_source_2:   in STD_LOGIC_VECTOR(31 downto 0);
          readdata:          in  STD_LOGIC_VECTOR(31 downto 0));
   end;
   
@@ -114,13 +116,14 @@ architecture test of testbench is
       port(clk, reset:        in  STD_LOGIC;
            memtoreg, pcsrc:   in  STD_LOGIC;
            alusrc, regdst:    in  STD_LOGIC;
-           regwrite, jump:    in  STD_LOGIC;
+           jump:    in  STD_LOGIC;
            alucontrol:        in  STD_LOGIC_VECTOR(2 downto 0);
            zero:              out STD_LOGIC;
            pc:                buffer STD_LOGIC_VECTOR(31 downto 0);
            instr:             in STD_LOGIC_VECTOR(31 downto 0);
-           aluout, writedata: buffer STD_LOGIC_VECTOR(31 downto 0);
-           readdata:          in  STD_LOGIC_VECTOR(31 downto 0));
+           aluout: buffer STD_LOGIC_VECTOR(31 downto 0);
+           ula_source_1:          in  STD_LOGIC_VECTOR(31 downto 0);
+           ula_source_2:          in  STD_LOGIC_VECTOR(31 downto 0));
     end component;
     signal memtoreg, alusrc, regdst, regwrite, jump, pcsrc: STD_LOGIC;
     signal zero: STD_LOGIC;
@@ -130,6 +133,6 @@ architecture test of testbench is
                               zero, memtoreg, memwrite, pcsrc, alusrc,
                               regdst, regwrite, jump, alucontrol);
     dp: datapath port map(clk, reset, memtoreg, pcsrc, alusrc, regdst,
-                          regwrite, jump, alucontrol, zero, pc, instr,
-                          aluout, writedata, readdata);
+                          jump, alucontrol, zero, pc, instr,
+                          aluout, ula_source_1, ula_source_2);
   end;
