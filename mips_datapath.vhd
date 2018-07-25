@@ -10,8 +10,8 @@ entity datapath is  -- MIPS datapath
        pc:                buffer STD_LOGIC_VECTOR(31 downto 0);
        instr:             in  STD_LOGIC_VECTOR(31 downto 0);
        aluout: buffer STD_LOGIC_VECTOR(31 downto 0);
-       ula_source_1         in STD_LOGIC_VECTOR(31 downto 0);
-       ula_source_2         in STD_LOGIC_VECTOR(31 downto 0));
+       ula_source_1:         in STD_LOGIC_VECTOR(31 downto 0);
+       ula_source_2:         in STD_LOGIC_VECTOR(31 downto 0));
 end;
 
 architecture struct of datapath is
@@ -110,7 +110,7 @@ end;
 
 architecture behave of signext is
 begin
-  y <= X"ffff" & a when a(15) else X"0000" & a; 
+ -- y <= X"ffff" & a when a(15) else X"0000" & a; 
 end;
 
 library IEEE; use IEEE.STD_LOGIC_1164.all;  use IEEE.STD_LOGIC_ARITH.all;
