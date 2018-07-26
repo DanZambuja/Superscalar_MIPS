@@ -22,7 +22,6 @@ entity Controller is -- single cycle control decoder
   );
 end;
 
-
 architecture struct of Controller is
 
   component Main_Decoder
@@ -52,21 +51,27 @@ architecture struct of Controller is
 begin
   -- Controller A
   md_A: Main_Decoder port map(op_A, memtoreg_A, memwrite_A, branch_A,
-                              alusrc_A, regdst_A, regwrite_A, jump_A, aluop_A, bneq_A);
+                              alusrc_A, regdst_A, regwrite_A, 
+                              jump_A, aluop_A, bneq_A);
+
   ad_A: ALU_Decoder port map(funct_A, aluop_A, alucontrol_A);
 
   pcsrc_A <= (branch_A and zero_A) or (bneq_A and not zero_A);
 
   -- Controller B
   md_B: Main_Decoder port map(op_B, memtoreg_B, memwrite_B, branch_B,
-                              alusrc_B, regdst_B, regwrite_B, jump_B, aluop_B, bneq_B);
+                              alusrc_B, regdst_B, regwrite_B, 
+                              jump_B, aluop_B, bneq_B);
+
   ad_B: ALU_Decoder port map(funct_B, aluop_B, alucontrol_B);
 
   pcsrc_B <= (branch_B and zero_B) or (bneq_B and not zero_B);
 
   -- Controller C
   md_C: Main_Decoder port map(op_C, memtoreg_C, memwrite_C, branch_C,
-                              alusrc_C, regdst_C, regwrite_C, jump_C, aluop_C, bneq_C);
+                              alusrc_C, regdst_C, regwrite_C, 
+                              jump_C, aluop_C, bneq_C);
+                              
   ad_C: ALU_Decoder port map(funct_C, aluop_C, alucontrol_C);
 
   pcsrc_C <= (branch_C and zero_C) or (bneq_C and not zero_C);
