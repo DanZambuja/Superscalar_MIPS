@@ -69,8 +69,19 @@ begin
 
   se: signext port map(instr(15 downto 0), signimm);
 
-  -- ALU logic
-  srcbmux: mux2 generic map(32) port map(ula_source_2, signimm, alusrc, 
+  -- ALU logic A
+  srcbmux_A: mux2 generic map(32) port map(ula_source_2, signimm, alusrc, 
                                          src2);
-  mainalu: alu port map(src1, src2, alucontrol, aluout, zero);
+  mainalu_A: alu port map(src1, src2, alucontrol, aluout, zero);
+
+  -- ALU logic B
+  srcbmux_B: mux2 generic map(32) port map(ula_source_2, signimm, alusrc, 
+                                         src2);
+  mainalu_B: alu port map(src1, src2, alucontrol, aluout, zero);
+
+  -- ALU logic C
+  srcbmux_C: mux2 generic map(32) port map(ula_source_2, signimm, alusrc, 
+                                         src2);
+  mainalu_C: alu port map(src1, src2, alucontrol, aluout, zero);
+
 end;
