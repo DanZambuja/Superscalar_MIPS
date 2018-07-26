@@ -80,9 +80,9 @@ begin
 
   pcadd2: adder port map(pcplus4, signimmsh_A, pcbranch);
 
-  pcbrmux: mux2 generic map(32) port map(pcplus4, pcbranch, pcsrc, pcnextbr);
+  pcbrmux: mux2 generic map(32) port map(pcplus4, pcbranch, pcsrc_A, pcnextbr);
 
-  pcmux: mux2 generic map(32) port map(pcnextbr, pcjump, jump, pcnext);
+  pcmux: mux2 generic map(32) port map(pcnextbr, pcjump, jump_A, pcnext);
 
   se_A: signext port map(instr_A(15 downto 0), signimm_A);
 
