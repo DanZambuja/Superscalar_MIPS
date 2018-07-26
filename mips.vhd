@@ -2,13 +2,16 @@ library IEEE;
 use IEEE.STD_LOGIC_1164.all;
 
 entity mips is -- single cycle MIPS processor
-  port(clk, reset:                 in  STD_LOGIC;
-       pc:                         out STD_LOGIC_VECTOR(31 downto 0);
-       instr_A, instr_B, instr_C:  in  STD_LOGIC_VECTOR(31 downto 0);
-       memwrite:                   out STD_LOGIC;
-       aluout, writedata:          out STD_LOGIC_VECTOR(31 downto 0);
-       ula_source_1, ula_source_2: in STD_LOGIC_VECTOR(31 downto 0);
-       readdata:                   in  STD_LOGIC_VECTOR(31 downto 0));
+    port(
+        clk, reset                                   :  in  STD_LOGIC;
+        pc                                           :  out STD_LOGIC_VECTOR(31 downto 0);
+        instr_A, instr_B, instr_C                    :  in  STD_LOGIC_VECTOR(31 downto 0);
+        memwrite_A, memwrite_B, memwrite_C           :  out STD_LOGIC;
+        aluout_A, aluout_B, aluout_C                 :  out STD_LOGIC_VECTOR(31 downto 0);
+        writedata_A, writedata_B, writedata_C        :  out STD_LOGIC_VECTOR(31 downto 0);
+        ula_source_A, ula_source_B, ula_source_B     :  in STD_LOGIC_VECTOR(31 downto 0);
+        readdata_A, readdata_B, readdata_C           :  in  STD_LOGIC_VECTOR(31 downto 0)
+    );
 end;
 
 architecture struct of mips is

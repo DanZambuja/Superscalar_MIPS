@@ -7,14 +7,19 @@ end;
 
 architecture test of testbench is
   component top
-    port(clk, reset:           in  STD_LOGIC;
-         writedata, dataadr:   out STD_LOGIC_VECTOR(31 downto 0);
-         ula_source_1, ula_source_2:   in STD_LOGIC_VECTOR(31 downto 0);
-         memwrite:             out STD_LOGIC);
+    port(
+      clk, reset                                :   in     STD_LOGIC;
+      writedata_A, writedata_B, writedata_C     :   buffer STD_LOGIC_VECTOR(31 downto 0);
+      dataadr_A, dataaddr_B, dataaddr_C         :   buffer STD_LOGIC_VECTOR(31 downto 0);
+      ula_source_A, ula_source_B, ula_source_C  :   in     STD_LOGIC_VECTOR(31 downto 0);
+      memwrite_A, memwrite_B, memwrite_C        :   buffer STD_LOGIC
+    );
   end component;
-  signal writedata, dataadr:         STD_LOGIC_VECTOR(31 downto 0);
-  signal ula_source_1, ula_source_2: STD_LOGIC_VECTOR(31 downto 0);
-  signal clk, reset,  memwrite:      STD_LOGIC;
+  signal writedata_A, dataadr_A                              : STD_LOGIC_VECTOR(31 downto 0);
+  signal writedata_B, dataadr_B                              : STD_LOGIC_VECTOR(31 downto 0);
+  signal writedata_C, dataadr_C                              : STD_LOGIC_VECTOR(31 downto 0);
+  signal ula_source_A, ula_source_B, ula_source_C            : STD_LOGIC_VECTOR(31 downto 0);
+  signal clk, reset, memwrite_A, memwrite_B, memwrite_C      : STD_LOGIC;
   
   begin
   
