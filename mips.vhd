@@ -12,17 +12,28 @@ entity mips is -- single cycle MIPS processor
 end;
 
 architecture struct of mips is
+
   component controller
-    port(op_A, funct_A:      in  STD_LOGIC_VECTOR(5 downto 0);
-         op_B, funct_B:      in  STD_LOGIC_VECTOR(5 downto 0);
-         op_C, funct_C:      in  STD_LOGIC_VECTOR(5 downto 0);
-         zero:               in  STD_LOGIC;
-         memtoreg, memwrite: out STD_LOGIC;
-         pcsrc, alusrc:      out STD_LOGIC;
-         regdst, regwrite:   out STD_LOGIC;
-         jump:               out STD_LOGIC;
-         alucontrol:         out STD_LOGIC_VECTOR(2 downto 0));
+    port(
+        op_A, op_B, op_C            :   in  STD_LOGIC_VECTOR(5 downto 0);
+        funct_A, funct_B, funct_C   :   in  STD_LOGIC_VECTOR(5 downto 0);
+        zero_A, zero_B, zero_C      :   in  STD_LOGIC;
+        memtoreg_A, memwrite_A      :   out STD_LOGIC;
+        memtoreg_B, memwrite_B      :   out STD_LOGIC;
+        memtoreg_C, memwrite_C      :   out STD_LOGIC;
+        pcsrc_A, alusrc_A           :   out STD_LOGIC;
+        pcsrc_B, alusrc_B           :   out STD_LOGIC;
+        pcsrc_C, alusrc_C           :   out STD_LOGIC;
+        regdst_A, regwrite_A        :   out STD_LOGIC;
+        regdst_B, regwrite_B        :   out STD_LOGIC;
+        regdst_C, regwrite_C        :   out STD_LOGIC;
+        jump_A, jump_B, jump_C      :   out STD_LOGIC;
+        alucontrol_A                :   out STD_LOGIC_VECTOR(2 downto 0);
+        alucontrol_B                :   out STD_LOGIC_VECTOR(2 downto 0);
+        alucontrol_C                :   out STD_LOGIC_VECTOR(2 downto 0)
+    );
   end component;
+
   component datapath
     port(clk, reset:        in  STD_LOGIC;
          memtoreg, pcsrc:   in  STD_LOGIC;
@@ -39,13 +50,16 @@ architecture struct of mips is
   signal memtoreg, alusrc, regdst, regwrite, jump, pcsrc: STD_LOGIC;
   signal zero: STD_LOGIC;
   signal alucontrol: STD_LOGIC_VECTOR(2 downto 0);
+
 begin
-  cont: controller port map(instr_A(31 downto 26), instr_A(5 downto 0),
+
+    cont: controller port map(instr_A(31 downto 26), instr_A(5 downto 0),
                             instr_B(31 downto 26), instr_B(5 downto 0),
                             instr_C(31 downto 26), instr_C(5 downto 0),
                             zero, memtoreg, memwrite, pcsrc, alusrc,
                             regdst, regwrite, jump, alucontrol);
-  dp: datapath port map(clk, reset, memtoreg, pcsrc, alusrc, regdst,
-                        jump, alucontrol, zero, pc, instr_A, instr_B, instr_C,
-                        aluout, ula_source_1, ula_source_2);
+
+    dp: datapath port map(clk, reset, memtoreg, pcsrc, alusrc, regdst,
+                          jump, alucontrol, zero, pc, instr_A, instr_B, instr_C,
+                          aluout, ula_source_1, ula_source_2);
 end;

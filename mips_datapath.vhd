@@ -1,17 +1,19 @@
 library IEEE; use IEEE.STD_LOGIC_1164.all; use IEEE.STD_LOGIC_ARITH.all;
 
 entity datapath is  -- MIPS datapath
-  port(clk, reset:        in  STD_LOGIC;
-       memtoreg, pcsrc:   in  STD_LOGIC;
-       alusrc, regdst:    in  STD_LOGIC;
-       jump:              in  STD_LOGIC;
-       alucontrol:        in  STD_LOGIC_VECTOR(2 downto 0);
-       zero:              out STD_LOGIC;
-       pc:                buffer STD_LOGIC_VECTOR(31 downto 0);
-       instr:             in  STD_LOGIC_VECTOR(31 downto 0);
-       aluout: buffer STD_LOGIC_VECTOR(31 downto 0);
-       ula_source_1:         in STD_LOGIC_VECTOR(31 downto 0);
-       ula_source_2:         in STD_LOGIC_VECTOR(31 downto 0));
+  port(
+    clk, reset:        in  STD_LOGIC;
+    memtoreg, pcsrc:   in  STD_LOGIC;
+    alusrc, regdst:    in  STD_LOGIC;
+    jump:              in  STD_LOGIC;
+    alucontrol:        in  STD_LOGIC_VECTOR(2 downto 0);
+    zero:              out STD_LOGIC;
+    pc:                buffer STD_LOGIC_VECTOR(31 downto 0);
+    instr:             in  STD_LOGIC_VECTOR(31 downto 0);
+    aluout: buffer STD_LOGIC_VECTOR(31 downto 0);
+    ula_source_1:         in STD_LOGIC_VECTOR(31 downto 0);
+    ula_source_2:         in STD_LOGIC_VECTOR(31 downto 0)
+  );
 end;
 
 architecture struct of datapath is
