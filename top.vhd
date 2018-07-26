@@ -21,7 +21,7 @@ end;
         memwrite_A, memwrite_B, memwrite_C           :  out STD_LOGIC;
         aluout_A, aluout_B, aluout_C                 :  out STD_LOGIC_VECTOR(31 downto 0);
         writedata_A, writedata_B, writedata_C        :  out STD_LOGIC_VECTOR(31 downto 0);
-        ula_source_A, ula_source_B, ula_source_B     :  in STD_LOGIC_VECTOR(31 downto 0);
+        ula_source_A, ula_source_B, ula_source_C     :  in STD_LOGIC_VECTOR(31 downto 0);
         readdata_A, readdata_B, readdata_C           :  in  STD_LOGIC_VECTOR(31 downto 0)
       );
     end component;
@@ -35,9 +35,9 @@ end;
 
     component Data_Memory
       port(
-        CLK,                   :  in STD_LOGIC;
+        CLK                    :  in STD_LOGIC;
         WE_A, WE_B, WE_C       :  in STD_LOGIC;
-        WA_A, WA_B, WA_C       :  in STD_LOGIC_VECTOR(4 downto 0);
+        WA_A, WA_B, WA_C       :  in STD_LOGIC_VECTOR(31 downto 0);
         WD_A, WD_B, WD_C       :  in STD_LOGIC_VECTOR(31 downto 0);
         RD_A, RD_B, RD_C       :  out STD_LOGIC_VECTOR(31 downto 0)
       );

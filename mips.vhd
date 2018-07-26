@@ -9,7 +9,7 @@ entity mips is -- single cycle MIPS processor
         memwrite_A, memwrite_B, memwrite_C           :  out STD_LOGIC;
         aluout_A, aluout_B, aluout_C                 :  out STD_LOGIC_VECTOR(31 downto 0);
         writedata_A, writedata_B, writedata_C        :  out STD_LOGIC_VECTOR(31 downto 0);
-        ula_source_A, ula_source_B, ula_source_B     :  in STD_LOGIC_VECTOR(31 downto 0);
+        ula_source_A, ula_source_B, ula_source_C     :  in STD_LOGIC_VECTOR(31 downto 0);
         readdata_A, readdata_B, readdata_C           :  in  STD_LOGIC_VECTOR(31 downto 0)
     );
 end;
@@ -76,7 +76,7 @@ begin
         memtoreg_A, memwrite_A, memtoreg_B, memwrite_B, memtoreg_C, memwrite_C,
         pcsrc_A, alusrc_A, pcsrc_B, alusrc_B, pcsrc_C, alusrc_C,
         regdst_A, regwrite_A, regdst_B, regwrite_B, regdst_C, regwrite_C,
-        jump_A, alucontrol_A, jump_B, alucontrol_B, jump_C, alucontrol_C
+        jump_A, jump_B, jump_C, alucontrol_A, alucontrol_B,  alucontrol_C
     );
 
     dp: datapath port map(
@@ -87,7 +87,7 @@ begin
         alusrc_A, regdst_A,
         alusrc_B, regdst_B,
         alusrc_C, regdst_C,
-        jump_A, jump_B, jump_C 
+        jump_A, jump_B, jump_C, 
         alucontrol_A, alucontrol_B, alucontrol_C, 
         zero_A, zero_B, zero_C, 
         pc, instr_A, instr_B, instr_C,
