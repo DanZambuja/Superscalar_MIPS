@@ -54,9 +54,9 @@ architecture struct of mips is
         pc                           :   buffer STD_LOGIC_VECTOR(31 downto 0);
         instr_A, instr_B, instr_C    :   in  STD_LOGIC_VECTOR(31 downto 0);
         aluout_A, aluout_B, aluout_C :   buffer STD_LOGIC_VECTOR(31 downto 0);
-        ula_source_A                 :   in STD_LOGIC_VECTOR(31 downto 0);
-        ula_source_B                 :   in STD_LOGIC_VECTOR(31 downto 0);
-        ula_source_C                 :   in STD_LOGIC_VECTOR(31 downto 0)
+        alu_data_A1, alu_data_A2     :   in STD_LOGIC_VECTOR(31 downto 0);
+        alu_data_B1, alu_data_B2     :   in STD_LOGIC_VECTOR(31 downto 0);
+        alu_data_C1, alu_data_C2     :   in STD_LOGIC_VECTOR(31 downto 0)
     );
   end component;
 
@@ -118,7 +118,9 @@ begin
         zero_A, zero_B, zero_C, 
         pc, instr_A, instr_B, instr_C,
         aluout_A, aluout_B, aluout_C, 
-        ula_source_A, ula_source_B, ula_source_C
+        alu_data_a1, alu_data_a2,
+        alu_data_b1, alu_data_b2,
+        alu_data_c1, alu_data_c2
     );
 
     rf: Register_File port map(

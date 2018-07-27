@@ -17,8 +17,8 @@ entity datapath is  -- MIPS datapath
     pc                           :   buffer STD_LOGIC_VECTOR(31 downto 0);
     instr_A, instr_B, instr_C    :   in  STD_LOGIC_VECTOR(31 downto 0);
     aluout_A, aluout_B, aluout_C :   buffer STD_LOGIC_VECTOR(31 downto 0);
-    alu_data_B1, alu_data_B2     :   in STD_LOGIC_VECTOR(31 downto 0);
     alu_data_A1, alu_data_A2     :   in STD_LOGIC_VECTOR(31 downto 0);
+    alu_data_B1, alu_data_B2     :   in STD_LOGIC_VECTOR(31 downto 0);
     alu_data_C1, alu_data_C2     :   in STD_LOGIC_VECTOR(31 downto 0)
   );
 end;
