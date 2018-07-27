@@ -17,9 +17,9 @@ entity datapath is  -- MIPS datapath
     pc                           :   buffer STD_LOGIC_VECTOR(31 downto 0);
     instr_A, instr_B, instr_C    :   in  STD_LOGIC_VECTOR(31 downto 0);
     aluout_A, aluout_B, aluout_C :   buffer STD_LOGIC_VECTOR(31 downto 0);
-    ula_source_A                 :   in STD_LOGIC_VECTOR(31 downto 0);
-    ula_source_B                 :   in STD_LOGIC_VECTOR(31 downto 0);
-    ula_source_C                 :   in STD_LOGIC_VECTOR(31 downto 0)
+    alu_data_B1, alu_data_B2     :   in STD_LOGIC_VECTOR(31 downto 0);
+    alu_data_A1, alu_data_A2     :   in STD_LOGIC_VECTOR(31 downto 0);
+    alu_data_C1, alu_data_C2     :   in STD_LOGIC_VECTOR(31 downto 0)
   );
 end;
 
@@ -91,17 +91,17 @@ begin
   se_C: signext port map(instr_C(15 downto 0), signimm_C);
 
   -- ALU logic A
-  srcbmux_A: mux2 generic map(32) port map(ula_source_A, signimm_A, alusrc_A, src2_A);
+  srcbmux_A: mux2 generic map(32) port map(alu_data_A2, signimm_A, alusrc_A, src2_A);
 
   mainalu_A: alu port map(src1_A, src2_A, alucontrol_A, aluout_A, zero_A);
 
   -- ALU logic B
-  srcbmux_B: mux2 generic map(32) port map(ula_source_B, signimm_B, alusrc_B, src2_B);
+  srcbmux_B: mux2 generic map(32) port map(alu_data_B2, signimm_B, alusrc_B, src2_B);
 
   mainalu_B: alu port map(src1_B, src2_B, alucontrol_B, aluout_B, zero_B);
 
   -- ALU logic C
-  srcbmux_C: mux2 generic map(32) port map(ula_source_C, signimm_C, alusrc_C, src2_C);
+  srcbmux_C: mux2 generic map(32) port map(alu_data_C2, signimm_C, alusrc_C, src2_C);
 
   mainalu_C: alu port map(src1_C, src2_C, alucontrol_C, aluout_C, zero_C);
 

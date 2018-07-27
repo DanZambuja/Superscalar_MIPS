@@ -60,11 +60,37 @@ architecture struct of mips is
     );
   end component;
 
+  component Register_File is -- The register file need to be shared among the ALUs
+    port(
+        CLK:           in  STD_LOGIC;
+        WE_A, WE_B, WE_C: in  STD_LOGIC; --write enable
+        RA1_A, RA2_A: in STD_LOGIC_VECTOR(4 downto 0); -- register selector for ULA 1
+        RA1_B, RA2_B: in STD_LOGIC_VECTOR(4 downto 0); -- register selector for ULA 2
+        RA1_C, RA2_C: in STD_LOGIC_VECTOR(4 downto 0); -- register selector for ULA 3
+        WA_A, WA_B, WA_C: in  STD_LOGIC_VECTOR(4 downto 0); -- register selector for write operation
+        WD_A, WD_B, WD_C: in  STD_LOGIC_VECTOR(31 downto 0); -- data to be writen
+        RD1_A, RD2_A: out STD_LOGIC_VECTOR(31 downto 0); -- output data for ULA 1
+        RD1_B, RD2_B: out STD_LOGIC_VECTOR(31 downto 0); -- output data for ULA 2
+        RD1_C, RD2_C: out STD_LOGIC_VECTOR(31 downto 0) -- output data for ULA 3
+    ); 
+end component;
+
+component mux2 generic(width: integer);
+    port(d0, d1: in  STD_LOGIC_VECTOR(width-1 downto 0);
+         s:      in  STD_LOGIC;
+         y:      out STD_LOGIC_VECTOR(width-1 downto 0));
+  end component;
+
+
   signal memtoreg_A, alusrc_A, regdst_A, regwrite_A, jump_A, pcsrc_A: STD_LOGIC;
   signal memtoreg_B, alusrc_B, regdst_B, regwrite_B, jump_B, pcsrc_B: STD_LOGIC;
   signal memtoreg_C, alusrc_C, regdst_C, regwrite_C, jump_C, pcsrc_C: STD_LOGIC;
   signal zero_A, zero_B, zero_C: STD_LOGIC;
   signal alucontrol_A, alucontrol_B, alucontrol_C: STD_LOGIC_VECTOR(2 downto 0);
+  signal writeReg_A, writeReg_B, writeReg_C: STD_LOGIC_VECTOR (4 downto 0);
+  signal alu_data_a1, alu_data_a2: STD_LOGIC_VECTOR (31 downto 0);
+  signal alu_data_b1, alu_data_b2: STD_LOGIC_VECTOR (31 downto 0);
+  signal alu_data_c1, alu_data_c2: STD_LOGIC_VECTOR (31 downto 0);
 
 begin
 
@@ -94,4 +120,25 @@ begin
         aluout_A, aluout_B, aluout_C, 
         ula_source_A, ula_source_B, ula_source_C
     );
+
+    rf: Register_File port map(
+        clk,
+        regwrite_A, regwrite_B, regdst_C,
+        instr_A(25 downto 21), instr_A(20 downto 16),
+        instr_B(25 downto 21), instr_B(20 downto 16),
+        instr_C(25 downto 21), instr_C(20 downto 16),
+        writeReg_A, writeReg_B, writeReg_C,
+        aluout_A, aluout_B, aluout_C,
+        alu_data_a1, alu_data_a2,
+        alu_data_b1, alu_data_b2,
+        alu_data_c1, alu_data_c2
+    );
+
+    wrmux_A: mux2 port map(instr_A(20 downto 16), instr_A(15 downto 11),
+                            regdst_A, writeReg_A);
+    wrmux_B: mux2 port map(instr_B(20 downto 16), instr_B(15 downto 11),
+                            regdst_B, writeReg_B);
+    wrmux_C: mux2 port map(instr_C(20 downto 16), instr_C(15 downto 11),
+                            regdst_C, writeReg_C);
+
 end;
