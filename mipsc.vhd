@@ -11,14 +11,12 @@ architecture test of testbench is
       clk, reset                                :   in     STD_LOGIC;
       writedata_A, writedata_B, writedata_C     :   buffer STD_LOGIC_VECTOR(31 downto 0);
       dataadr_A, dataaddr_B, dataaddr_C         :   buffer STD_LOGIC_VECTOR(31 downto 0);
-      ula_source_A, ula_source_B, ula_source_C  :   in     STD_LOGIC_VECTOR(31 downto 0);
       memwrite_A, memwrite_B, memwrite_C        :   buffer STD_LOGIC
     );
   end component;
   signal writedata_A, dataaddr_A                              : STD_LOGIC_VECTOR(31 downto 0);
   signal writedata_B, dataaddr_B                              : STD_LOGIC_VECTOR(31 downto 0);
   signal writedata_C, dataaddr_C                              : STD_LOGIC_VECTOR(31 downto 0);
-  signal ula_source_A, ula_source_B, ula_source_C            : STD_LOGIC_VECTOR(31 downto 0);
   signal clk, reset, memwrite_A, memwrite_B, memwrite_C      : STD_LOGIC;
   
   begin
@@ -26,7 +24,6 @@ architecture test of testbench is
     -- instantiate device to be tested
     dut: top port map(
       clk, reset, writedata_A, writedata_B, writedata_C, dataaddr_A, dataaddr_B, dataaddr_C, 
-      ula_source_A, ula_source_B, ula_source_C, 
       memwrite_A, memwrite_B, memwrite_C
     );
   

@@ -9,7 +9,6 @@ entity mips is -- single cycle MIPS processor
         memwrite_A, memwrite_B, memwrite_C           :  out STD_LOGIC;
         aluout_A, aluout_B, aluout_C                 :  out STD_LOGIC_VECTOR(31 downto 0);
         writedata_A, writedata_B, writedata_C        :  out STD_LOGIC_VECTOR(31 downto 0);
-        ula_source_A, ula_source_B, ula_source_C     :  in STD_LOGIC_VECTOR(31 downto 0);
         readdata_A, readdata_B, readdata_C           :  in  STD_LOGIC_VECTOR(31 downto 0)
     );
 end;

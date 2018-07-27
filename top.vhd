@@ -7,7 +7,6 @@ entity top is -- top-level design for testing
     clk, reset                                :   in     STD_LOGIC;
     writedata_A, writedata_B, writedata_C     :   buffer STD_LOGIC_VECTOR(31 downto 0);
     dataadr_A, dataaddr_B, dataaddr_C         :   buffer STD_LOGIC_VECTOR(31 downto 0);
-    ula_source_A, ula_source_B, ula_source_C  :   in     STD_LOGIC_VECTOR(31 downto 0);
     memwrite_A, memwrite_B, memwrite_C        :   buffer STD_LOGIC
   );
 end;
@@ -21,7 +20,6 @@ end;
         memwrite_A, memwrite_B, memwrite_C           :  out STD_LOGIC;
         aluout_A, aluout_B, aluout_C                 :  out STD_LOGIC_VECTOR(31 downto 0);
         writedata_A, writedata_B, writedata_C        :  out STD_LOGIC_VECTOR(31 downto 0);
-        ula_source_A, ula_source_B, ula_source_C     :  in STD_LOGIC_VECTOR(31 downto 0);
         readdata_A, readdata_B, readdata_C           :  in  STD_LOGIC_VECTOR(31 downto 0)
       );
     end component;
@@ -54,7 +52,6 @@ end;
       memwrite_A, memwrite_B, memwrite_C, 
       dataadr_A, dataaddr_B, dataaddr_C, 
       writedata_A, writedata_B, writedata_C, 
-      ula_source_A, ula_source_B, ula_source_C, 
       readdata_A, readdata_B, readdata_C
     );
 
