@@ -90,7 +90,6 @@ component mux2 generic(width: integer);
   signal alu_data_a1, alu_data_a2: STD_LOGIC_VECTOR (31 downto 0);
   signal alu_data_b1, alu_data_b2: STD_LOGIC_VECTOR (31 downto 0);
   signal alu_data_c1, alu_data_c2: STD_LOGIC_VECTOR (31 downto 0);
-  signal writedata_A, writedata_B, writedata_C: STD_LOGIC_VECTOR(31 downto 0);
 
 begin
 

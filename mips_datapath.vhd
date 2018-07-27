@@ -58,15 +58,13 @@ architecture struct of datapath is
          y:      out STD_LOGIC_VECTOR(width-1 downto 0));
   end component;
 
-  signal pcjump, pcnext, 
-         pcnextbr, pcplus4, 
-         pcbranch:           STD_LOGIC_VECTOR(31 downto 0);
+  signal pcjump, pcnext, pcnextbr, pcplus4, pcbranch: STD_LOGIC_VECTOR(31 downto 0);
   signal signimm_A, signimmsh_A: STD_LOGIC_VECTOR(31 downto 0);
   signal signimm_B, signimmsh_B: STD_LOGIC_VECTOR(31 downto 0);
   signal signimm_C, signimmsh_C: STD_LOGIC_VECTOR(31 downto 0);
-  signal src1_A, src2_A, result_A: STD_LOGIC_VECTOR(31 downto 0);
-  signal src1_B, src2_B, result_B: STD_LOGIC_VECTOR(31 downto 0);
-  signal src1_C, src2_C, result_C: STD_LOGIC_VECTOR(31 downto 0);
+  signal src2_A, result_A: STD_LOGIC_VECTOR(31 downto 0);
+  signal src2_B, result_B: STD_LOGIC_VECTOR(31 downto 0);
+  signal src2_C, result_C: STD_LOGIC_VECTOR(31 downto 0);
   
 begin
   -- next PC logic
@@ -93,16 +91,16 @@ begin
   -- ALU logic A
   srcbmux_A: mux2 generic map(32) port map(alu_data_A2, signimm_A, alusrc_A, src2_A);
 
-  mainalu_A: alu port map(src1_A, src2_A, alucontrol_A, aluout_A, zero_A);
+  mainalu_A: alu port map(alu_data_A1, src2_A, alucontrol_A, aluout_A, zero_A);
 
   -- ALU logic B
   srcbmux_B: mux2 generic map(32) port map(alu_data_B2, signimm_B, alusrc_B, src2_B);
 
-  mainalu_B: alu port map(src1_B, src2_B, alucontrol_B, aluout_B, zero_B);
+  mainalu_B: alu port map(alu_data_B1, src2_B, alucontrol_B, aluout_B, zero_B);
 
   -- ALU logic C
   srcbmux_C: mux2 generic map(32) port map(alu_data_C2, signimm_C, alusrc_C, src2_C);
 
-  mainalu_C: alu port map(src1_C, src2_C, alucontrol_C, aluout_C, zero_C);
+  mainalu_C: alu port map(alu_data_C1, src2_C, alucontrol_C, aluout_C, zero_C);
 
 end;
