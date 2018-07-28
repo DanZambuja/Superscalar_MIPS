@@ -58,7 +58,7 @@ architecture struct of datapath is
          y:      out STD_LOGIC_VECTOR(width-1 downto 0));
   end component;
 
-  signal pcjump, pcnext, pcnextbr, pcplus4, pcbranch: STD_LOGIC_VECTOR(31 downto 0);
+  signal pcjump, pcnext, pcnextbr, pcplus12, pcbranch: STD_LOGIC_VECTOR(31 downto 0);
   signal signimm_A, signimmsh_A: STD_LOGIC_VECTOR(31 downto 0);
   signal signimm_B, signimmsh_B: STD_LOGIC_VECTOR(31 downto 0);
   signal signimm_C, signimmsh_C: STD_LOGIC_VECTOR(31 downto 0);
@@ -68,17 +68,17 @@ architecture struct of datapath is
   
 begin
   -- next PC logic
-  pcjump <= pcplus4(31 downto 28) & instr_A(25 downto 0) & "00";
+  pcjump <= pcplus12(31 downto 28) & instr_A(25 downto 0) & "00";
 
   pcreg: flopr generic map(32) port map(clk, reset, pcnext, pc);
 
-  pcadd1: adder port map(pc, X"00000004", pcplus4);
+  pcadd1: adder port map(pc, X"0000000C", pcplus12);
 
   immsh: sl2 port map(signimm_A, signimmsh_A);
 
-  pcadd2: adder port map(pcplus4, signimmsh_A, pcbranch);
+  pcadd2: adder port map(pcplus12, signimmsh_A, pcbranch);
 
-  pcbrmux: mux2 generic map(32) port map(pcplus4, pcbranch, pcsrc_A, pcnextbr);
+  pcbrmux: mux2 generic map(32) port map(pcplus12, pcbranch, pcsrc_A, pcnextbr);
 
   pcmux: mux2 generic map(32) port map(pcnextbr, pcjump, jump_A, pcnext);
 

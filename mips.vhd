@@ -99,10 +99,17 @@ begin
         instr_B(31 downto 26), instr_B(5 downto 0),
         instr_C(31 downto 26), instr_C(5 downto 0),
         zero_A, zero_B, zero_C, 
-        memtoreg_A, memwrite_A, memtoreg_B, memwrite_B, memtoreg_C, memwrite_C,
-        pcsrc_A, alusrc_A, pcsrc_B, alusrc_B, pcsrc_C, alusrc_C,
-        regdst_A, regwrite_A, regdst_B, regwrite_B, regdst_C, regwrite_C,
-        jump_A, jump_B, jump_C, alucontrol_A, alucontrol_B,  alucontrol_C
+        memtoreg_A, memwrite_A, 
+        memtoreg_B, memwrite_B, 
+        memtoreg_C, memwrite_C,
+        pcsrc_A, alusrc_A, 
+        pcsrc_B, alusrc_B, 
+        pcsrc_C, alusrc_C,
+        regdst_A, regwrite_A, 
+        regdst_B, regwrite_B, 
+        regdst_C, regwrite_C,
+        jump_A, jump_B, jump_C, 
+        alucontrol_A, alucontrol_B,  alucontrol_C
     );
 
     dp: datapath port map(
@@ -116,7 +123,8 @@ begin
         jump_A, jump_B, jump_C, 
         alucontrol_A, alucontrol_B, alucontrol_C, 
         zero_A, zero_B, zero_C, 
-        pc, instr_A, instr_B, instr_C,
+        pc, 
+        instr_A, instr_B, instr_C,
         s_aluout_A, s_aluout_B, s_aluout_C, 
         alu_data_a1, alu_data_a2,
         alu_data_b1, alu_data_b2,
@@ -136,17 +144,21 @@ begin
         alu_data_c1, alu_data_c2
     );
 
-    resmux_A: mux2 generic map(32) port map(aluout_A, readdata_A, memtoreg_A, writedata_A);
+    resmux_A: mux2 generic map(32) port map(s_aluout_A, readdata_A, memtoreg_A, writedata_A);
 
-    resmux_B: mux2 generic map(32) port map(aluout_B, readdata_B, memtoreg_B, writedata_B);
+    resmux_B: mux2 generic map(32) port map(s_aluout_B, readdata_B, memtoreg_B, writedata_B);
 
-    resmux_C: mux2 generic map(32) port map(aluout_C, readdata_C, memtoreg_C, writedata_C);
+    resmux_C: mux2 generic map(32) port map(s_aluout_C, readdata_C, memtoreg_C, writedata_C);
     
-    wrmux_A: mux2 generic map(5) port map(instr_A(20 downto 16), instr_A(15 downto 11),
-                            regdst_A, writeReg_A);
-    wrmux_B: mux2 generic map(5) port map(instr_B(20 downto 16), instr_B(15 downto 11),
-                            regdst_B, writeReg_B);
-    wrmux_C: mux2 generic map(5) port map(instr_C(20 downto 16), instr_C(15 downto 11),
-                            regdst_C, writeReg_C);
+    wrmux_A: mux2 generic map(5) port map(instr_A(20 downto 16), instr_A(15 downto 11), regdst_A, writeReg_A);
 
+    wrmux_B: mux2 generic map(5) port map(instr_B(20 downto 16), instr_B(15 downto 11), regdst_B, writeReg_B);
+
+    wrmux_C: mux2 generic map(5) port map(instr_C(20 downto 16), instr_C(15 downto 11), regdst_C, writeReg_C);
+
+
+    aluout_A <= s_aluout_A;
+    aluout_B <= s_aluout_B;
+    aluout_C <= s_aluout_C;
+    
 end;
