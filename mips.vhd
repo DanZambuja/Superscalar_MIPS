@@ -90,6 +90,7 @@ component mux2 generic(width: integer);
   signal alu_data_a1, alu_data_a2: STD_LOGIC_VECTOR (31 downto 0);
   signal alu_data_b1, alu_data_b2: STD_LOGIC_VECTOR (31 downto 0);
   signal alu_data_c1, alu_data_c2: STD_LOGIC_VECTOR (31 downto 0);
+  signal s_aluout_A, s_aluout_B,s_aluout_C: STD_LOGIC_VECTOR (31 downto 0);
 
 begin
 
@@ -116,7 +117,7 @@ begin
         alucontrol_A, alucontrol_B, alucontrol_C, 
         zero_A, zero_B, zero_C, 
         pc, instr_A, instr_B, instr_C,
-        aluout_A, aluout_B, aluout_C, 
+        s_aluout_A, s_aluout_B, s_aluout_C, 
         alu_data_a1, alu_data_a2,
         alu_data_b1, alu_data_b2,
         alu_data_c1, alu_data_c2
@@ -129,16 +130,23 @@ begin
         instr_B(25 downto 21), instr_B(20 downto 16),
         instr_C(25 downto 21), instr_C(20 downto 16),
         writeReg_A, writeReg_B, writeReg_C,
-        aluout_A, aluout_B, aluout_C,
+        s_aluout_A, s_aluout_B, s_aluout_C,
         alu_data_a1, alu_data_a2,
         alu_data_b1, alu_data_b2, 
         alu_data_c1, alu_data_c2
     );
 
-    wrmux_A: mux2 generic map(32) port map(aluout_A, readdata_A, memtoreg_A, writedata_A);
+    resmux_A: mux2 generic map(32) port map(aluout_A, readdata_A, memtoreg_A, writedata_A);
 
-    wrmux_B: mux2 generic map(32) port map(aluout_B, readdata_B, memtoreg_B, writedata_B);
+    resmux_B: mux2 generic map(32) port map(aluout_B, readdata_B, memtoreg_B, writedata_B);
 
-    wrmux_C: mux2 generic map(32) port map(aluout_C, readdata_C, memtoreg_C, writedata_C);
+    resmux_C: mux2 generic map(32) port map(aluout_C, readdata_C, memtoreg_C, writedata_C);
+    
+    wrmux_A: mux2 generic map(5) port map(instr_A(20 downto 16), instr_A(15 downto 11),
+                            regdst_A, writeReg_A);
+    wrmux_B: mux2 generic map(5) port map(instr_B(20 downto 16), instr_B(15 downto 11),
+                            regdst_B, writeReg_B);
+    wrmux_C: mux2 generic map(5) port map(instr_C(20 downto 16), instr_C(15 downto 11),
+                            regdst_C, writeReg_C);
 
 end;

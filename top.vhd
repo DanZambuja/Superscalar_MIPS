@@ -46,7 +46,7 @@ end;
   begin
     
     -- instantiate processor and memories
-    mips1: mips port map(
+    mips1: MIPS port map(
       clk, reset, pc, 
       instr_A, instr_B, instr_C, 
       memwrite_A, memwrite_B, memwrite_C, 
