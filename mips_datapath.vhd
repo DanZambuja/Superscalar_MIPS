@@ -1,17 +1,26 @@
 library IEEE; use IEEE.STD_LOGIC_1164.all; use IEEE.STD_LOGIC_ARITH.all;
 
 entity datapath is  -- MIPS datapath
-  port(clk, reset:        in  STD_LOGIC;
-       memtoreg, pcsrc:   in  STD_LOGIC;
-       alusrc, regdst:    in  STD_LOGIC;
-       jump:              in  STD_LOGIC;
-       alucontrol:        in  STD_LOGIC_VECTOR(2 downto 0);
-       zero:              out STD_LOGIC;
-       pc:                buffer STD_LOGIC_VECTOR(31 downto 0);
-       instr:             in  STD_LOGIC_VECTOR(31 downto 0);
-       aluout: buffer STD_LOGIC_VECTOR(31 downto 0);
-       ula_source_1:         in STD_LOGIC_VECTOR(31 downto 0);
-       ula_source_2:         in STD_LOGIC_VECTOR(31 downto 0));
+  port(
+    clk, reset                   :   in  STD_LOGIC;
+    memtoreg_A, pcsrc_A          :   in  STD_LOGIC;
+    memtoreg_B, pcsrc_B          :   in  STD_LOGIC;
+    memtoreg_C, pcsrc_C          :   in  STD_LOGIC;
+    alusrc_A, regdst_A           :   in  STD_LOGIC;
+    alusrc_B, regdst_B           :   in  STD_LOGIC;
+    alusrc_C, regdst_C           :   in  STD_LOGIC;
+    jump_A, jump_B, jump_C       :   in  STD_LOGIC;
+    alucontrol_A                 :   in  STD_LOGIC_VECTOR(2 downto 0);
+    alucontrol_B                 :   in  STD_LOGIC_VECTOR(2 downto 0);
+    alucontrol_C                 :   in  STD_LOGIC_VECTOR(2 downto 0);
+    zero_A, zero_B, zero_C       :   out STD_LOGIC;
+    pc                           :   buffer STD_LOGIC_VECTOR(31 downto 0);
+    instr_A, instr_B, instr_C    :   in  STD_LOGIC_VECTOR(31 downto 0);
+    aluout_A, aluout_B, aluout_C :   buffer STD_LOGIC_VECTOR(31 downto 0);
+    alu_data_A1, alu_data_A2     :   in STD_LOGIC_VECTOR(31 downto 0);
+    alu_data_B1, alu_data_B2     :   in STD_LOGIC_VECTOR(31 downto 0);
+    alu_data_C1, alu_data_C2     :   in STD_LOGIC_VECTOR(31 downto 0)
+  );
 end;
 
 architecture struct of datapath is
@@ -49,114 +58,49 @@ architecture struct of datapath is
          y:      out STD_LOGIC_VECTOR(width-1 downto 0));
   end component;
 
-  signal pcjump, pcnext, 
-         pcnextbr, pcplus4, 
-         pcbranch:           STD_LOGIC_VECTOR(31 downto 0);
-  signal signimm, signimmsh: STD_LOGIC_VECTOR(31 downto 0);
-  signal src1, src2, result: STD_LOGIC_VECTOR(31 downto 0);
+  signal pcjump, pcnext, pcnextbr, pcplus4, pcbranch: STD_LOGIC_VECTOR(31 downto 0);
+  signal signimm_A, signimmsh_A: STD_LOGIC_VECTOR(31 downto 0);
+  signal signimm_B, signimmsh_B: STD_LOGIC_VECTOR(31 downto 0);
+  signal signimm_C, signimmsh_C: STD_LOGIC_VECTOR(31 downto 0);
+  signal src2_A, result_A: STD_LOGIC_VECTOR(31 downto 0);
+  signal src2_B, result_B: STD_LOGIC_VECTOR(31 downto 0);
+  signal src2_C, result_C: STD_LOGIC_VECTOR(31 downto 0);
   
 begin
   -- next PC logic
-  pcjump <= pcplus4(31 downto 28) & instr(25 downto 0) & "00";
+  pcjump <= pcplus4(31 downto 28) & instr_A(25 downto 0) & "00";
+
   pcreg: flopr generic map(32) port map(clk, reset, pcnext, pc);
+
   pcadd1: adder port map(pc, X"00000004", pcplus4);
-  immsh: sl2 port map(signimm, signimmsh);
-  pcadd2: adder port map(pcplus4, signimmsh, pcbranch);
-  pcbrmux: mux2 generic map(32) port map(pcplus4, pcbranch, 
-                                         pcsrc, pcnextbr);
-  pcmux: mux2 generic map(32) port map(pcnextbr, pcjump, jump, pcnext);
 
+  immsh: sl2 port map(signimm_A, signimmsh_A);
 
-  se: signext port map(instr(15 downto 0), signimm);
+  pcadd2: adder port map(pcplus4, signimmsh_A, pcbranch);
 
-  -- ALU logic
-  srcbmux: mux2 generic map(32) port map(ula_source_2, signimm, alusrc, 
-                                         src2);
-  mainalu: alu port map(src1, src2, alucontrol, aluout, zero);
-end;
+  pcbrmux: mux2 generic map(32) port map(pcplus4, pcbranch, pcsrc_A, pcnextbr);
 
-library IEEE; use IEEE.STD_LOGIC_1164.all; 
-use IEEE.NUMERIC_STD_UNSIGNED.all;
+  pcmux: mux2 generic map(32) port map(pcnextbr, pcjump, jump_A, pcnext);
 
-entity adder is -- adder
-  port(a, b: in  STD_LOGIC_VECTOR(31 downto 0);
-       y:    out STD_LOGIC_VECTOR(31 downto 0));
-end;
+  se_A: signext port map(instr_A(15 downto 0), signimm_A);
 
-architecture behave of adder is
-begin
-  y <= a + b;
-end;
+  se_B: signext port map(instr_B(15 downto 0), signimm_B);
 
+  se_C: signext port map(instr_C(15 downto 0), signimm_C);
 
-library IEEE; use IEEE.STD_LOGIC_1164.all;
+  -- ALU logic A
+  srcbmux_A: mux2 generic map(32) port map(alu_data_A2, signimm_A, alusrc_A, src2_A);
 
-entity sl2 is -- shift left by 2
-  port(a: in  STD_LOGIC_VECTOR(31 downto 0);
-       y: out STD_LOGIC_VECTOR(31 downto 0));
-end;
+  mainalu_A: alu port map(alu_data_A1, src2_A, alucontrol_A, aluout_A, zero_A);
 
-architecture behave of sl2 is
-begin
-  y <= a(29 downto 0) & "00";
-end;
+  -- ALU logic B
+  srcbmux_B: mux2 generic map(32) port map(alu_data_B2, signimm_B, alusrc_B, src2_B);
 
-library IEEE; use IEEE.STD_LOGIC_1164.all;
+  mainalu_B: alu port map(alu_data_B1, src2_B, alucontrol_B, aluout_B, zero_B);
 
-entity signext is -- sign extender
-  port(a: in  STD_LOGIC_VECTOR(15 downto 0);
-       y: out STD_LOGIC_VECTOR(31 downto 0));
-end;
+  -- ALU logic C
+  srcbmux_C: mux2 generic map(32) port map(alu_data_C2, signimm_C, alusrc_C, src2_C);
 
-architecture behave of signext is
-begin
- -- y <= X"ffff" & a when a(15) else X"0000" & a; 
-end;
+  mainalu_C: alu port map(alu_data_C1, src2_C, alucontrol_C, aluout_C, zero_C);
 
-library IEEE; use IEEE.STD_LOGIC_1164.all;  use IEEE.STD_LOGIC_ARITH.all;
-
-entity flopr is -- flip-flop with synchronous reset
-  generic(width: integer);
-  port(clk, reset: in  STD_LOGIC;
-       d:          in  STD_LOGIC_VECTOR(width-1 downto 0);
-       q:          out STD_LOGIC_VECTOR(width-1 downto 0));
-end;
-
-architecture asynchronous of flopr is
-begin
-  process(clk, reset) begin
-    if reset then  q <= (others => '0');
-    elsif rising_edge(clk) then
-      q <= d;
-    end if;
-  end process;
-end;
-
-library IEEE; use IEEE.STD_LOGIC_1164.all; 
-use IEEE.NUMERIC_STD_UNSIGNED.all;
-
-entity alu is 
-  port(a, b:       in  STD_LOGIC_VECTOR(31 downto 0);
-       alucontrol: in  STD_LOGIC_VECTOR(2 downto 0);
-       result:     buffer STD_LOGIC_VECTOR(31 downto 0);
-       zero:       out STD_LOGIC);
-end;
-
-architecture behave of alu is
-  signal condinvb, sum: STD_LOGIC_VECTOR(31 downto 0);
-begin
-  condinvb <= not b when alucontrol(2) else b;
-  sum <= a + condinvb + alucontrol(2);
-
-  process(all) begin
-    case alucontrol(1 downto 0) is
-      when "00"   => result <= a and b; 
-      when "01"   => result <= a or b; 
-      when "10"   => result <= sum; 
-      when "11"   => result <= (0 => sum(31), others => '0'); 
-      when others => result <= (others => 'X'); 
-    end case;
-  end process;
-
-  zero <= '1' when result = X"00000000" else '0';
 end;

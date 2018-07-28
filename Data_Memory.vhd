@@ -5,7 +5,7 @@ use IEEE.NUMERIC_STD_UNSIGNED.all;
 entity Data_Memory is -- data memory
   port(
     CLK, WE_A, WE_B, WE_C  :  in STD_LOGIC;
-    WA_A, WA_B, WA_C       :  in STD_LOGIC_VECTOR(4 downto 0);
+    WA_A, WA_B, WA_C       :  in STD_LOGIC_VECTOR(31 downto 0);
     WD_A, WD_B, WD_C       :  in STD_LOGIC_VECTOR(31 downto 0);
     RD_A, RD_B, RD_C       :  out STD_LOGIC_VECTOR(31 downto 0)
   );
@@ -20,16 +20,16 @@ begin
     -- read or write memory
     loop
       if clk'event and clk = '1' then
-          if (WE_A = '1') then mem(to_integer(WA_A)) := WD_A;
+          if (WE_A = '1') then mem(to_integer(WA_A(7 downto 2))) := WD_A;
           end if;
-          if (WE_B = '1') then mem(to_integer(WA_B)) := WD_B;
+          if (WE_B = '1') then mem(to_integer(WA_B(7 downto 2))) := WD_B;
           end if;
-          if (WE_C = '1') then mem(to_integer(WA_C)) := WD_C;
+          if (WE_C = '1') then mem(to_integer(WA_C(7 downto 2))) := WD_C;
           end if;
       end if;
-      RD_A <= mem(to_integer(WA_A));
-      RD_B <= mem(to_integer(WA_B)); 
-      RD_C <= mem(to_integer(WA_C)); 
+      RD_A <= mem(to_integer(WA_A(7 downto 2)));
+      RD_B <= mem(to_integer(WA_B(7 downto 2))); 
+      RD_C <= mem(to_integer(WA_C(7 downto 2))); 
       wait on CLK, WA_A;
     end loop;
 

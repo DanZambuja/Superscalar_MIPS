@@ -1,5 +1,6 @@
 library IEEE; 
-use IEEE.STD_LOGIC_1164.all; use STD.TEXTIO.all;
+use IEEE.STD_LOGIC_1164.all; 
+use STD.TEXTIO.all;
 use IEEE.NUMERIC_STD_UNSIGNED.all;  
 
 entity Instruction_Memory is -- instruction memory
@@ -23,7 +24,7 @@ begin
       mem(i) := (others => '0'); 
     end loop;
     index := 0; 
-    FILE_OPEN(mem_file, "C:/docs/DDCA2e/hdl/memfile.dat", READ_MODE);
+    FILE_OPEN(mem_file, "C:/Users/danie/Desktop/Arq/Superscalar/src/memfile.dat", READ_MODE);
     while not endfile(mem_file) loop
       readline(mem_file, L);
       result := 0;
@@ -46,8 +47,8 @@ begin
     -- read memory
     loop
       instruction_A <= mem(to_integer(limited_PC));
-      instruction_B <= mem(to_integer(limited_PC+4));
-      instruction_C <= mem(to_integer(limited_PC+8));
+      instruction_B <= mem(to_integer(limited_PC) + 3);
+      instruction_C <= mem(to_integer(limited_PC) + 6);
       wait on limited_PC;
     end loop;
   end process;
