@@ -25,10 +25,11 @@ begin
     comp: Comparator port map(write_register_A, write_register_B, write_register_C, dependencies);
     process(all) begin
         case dependencies is
-            when '00' => PC_enable <= '1'; -- no dependencies
-            when '10' => PC_enable <= '0'; -- stall B
-            when '01' => PC_enable <= '0'; -- stall C ( if either  A = C or B = C )
-            when '11' => PC_enable <= '0'; -- stall B and C
+            when "00" => PC_enable <= '1'; -- no dependencies
+            when "10" => PC_enable <= '0'; -- stall B
+            when "01" => PC_enable <= '0'; -- stall C ( if either  A = C or B = C )
+            when "11" => PC_enable <= '0'; -- stall B and C
+            when others => PC_enable <= '-';
         end case;
     end process;
 end;

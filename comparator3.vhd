@@ -12,18 +12,19 @@ end;
 
 architecture struct of Comparator is
 begin
-    process(A, B, C) begin
-        result <= '000';
+    process(A, B, C)
+    begin
+        result <= "00";
         if(A = B AND B = C) then
-            result <= '11'
+            result <= "11";
         elsif(A = B) then
-            result <= '10'
+            result <= "10";
         elsif(A = C) then
-            result <= '01'
+            result <= "01";
         elsif(B = C) then
-            result <= '01'
-        others
-            result <= '00';
+            result <= "01";
+        else
+            result <= "00";
         end if;
     end process;
 end struct;
