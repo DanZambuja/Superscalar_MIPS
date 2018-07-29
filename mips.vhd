@@ -75,6 +75,13 @@ architecture struct of mips is
     ); 
 end component;
 
+component Hazard_Unit is
+  port(
+    write_register_A, write_register_B, write_register_C:  in  STD_LOGIC_VECTOR(4 downto 0);
+    PC_enable: out STD_LOGIC
+  );
+end component;
+
 component mux2 generic(width: integer);
     port(d0, d1: in  STD_LOGIC_VECTOR(width-1 downto 0);
          s:      in  STD_LOGIC;
@@ -92,6 +99,7 @@ component mux2 generic(width: integer);
   signal alu_data_b1, alu_data_b2: STD_LOGIC_VECTOR (31 downto 0);
   signal alu_data_c1, alu_data_c2: STD_LOGIC_VECTOR (31 downto 0);
   signal s_aluout_A, s_aluout_B,s_aluout_C: STD_LOGIC_VECTOR (31 downto 0);
+  signal PC_enable: STD_LOGIC;
 
 begin
 
@@ -143,6 +151,8 @@ begin
         alu_data_b1, alu_data_b2, 
         alu_data_c1, alu_data_c2
     );
+
+    haz_unit: Hazard_Unit port map(writeReg_A, writeReg_B, writeReg_C, PC_enable);
 
     resmux_A: mux2 generic map(32) port map(s_aluout_A, readdata_A, memtoreg_A, writedata_A);
 
