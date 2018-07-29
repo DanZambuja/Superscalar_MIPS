@@ -95,9 +95,8 @@ component mux2 generic(width: integer);
 begin
 
     cont: controller port map(
-        instr_A(31 downto 26), instr_A(5 downto 0),
-        instr_B(31 downto 26), instr_B(5 downto 0),
-        instr_C(31 downto 26), instr_C(5 downto 0),
+        instr_A(31 downto 26), instr_B(31 downto 26), instr_C(31 downto 26),
+        instr_A(5 downto 0), instr_B(5 downto 0), instr_C(5 downto 0),
         zero_A, zero_B, zero_C, 
         memtoreg_A, memwrite_A, 
         memtoreg_B, memwrite_B, 
