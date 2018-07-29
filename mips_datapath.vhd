@@ -14,6 +14,7 @@ entity datapath is  -- MIPS datapath
     alucontrol_B                 :   in  STD_LOGIC_VECTOR(2 downto 0);
     alucontrol_C                 :   in  STD_LOGIC_VECTOR(2 downto 0);
     zero_A, zero_B, zero_C       :   out STD_LOGIC;
+    pc_enable                    :   in STD_LOGIC;
     pc                           :   buffer STD_LOGIC_VECTOR(31 downto 0);
     instr_A, instr_B, instr_C    :   in  STD_LOGIC_VECTOR(31 downto 0);
     aluout_A, aluout_B, aluout_C :   buffer STD_LOGIC_VECTOR(31 downto 0);
@@ -58,7 +59,7 @@ architecture struct of datapath is
          y:      out STD_LOGIC_VECTOR(width-1 downto 0));
   end component;
 
-  signal pcjump, pcnext, pcnextbr, pcplus12, pcbranch: STD_LOGIC_VECTOR(31 downto 0);
+  signal pcjump, pcnext, pcnextbr, pcplus12, pcbranch, pc2: STD_LOGIC_VECTOR(31 downto 0);
   signal signimm_A, signimmsh_A: STD_LOGIC_VECTOR(31 downto 0);
   signal signimm_B, signimmsh_B: STD_LOGIC_VECTOR(31 downto 0);
   signal signimm_C, signimmsh_C: STD_LOGIC_VECTOR(31 downto 0);
@@ -72,7 +73,9 @@ begin
 
   pcreg: flopr generic map(32) port map(clk, reset, pcnext, pc);
 
-  pcadd1: adder port map(pc, X"0000000C", pcplus12);
+  pc_en: mux2 generic map(32) port map (X"00000000", X"0000000C", pc_enable, pc2);
+
+  pcadd12: adder port map(pc, pc2, pcplus12);
 
   immsh: sl2 port map(signimm_A, signimmsh_A);
 

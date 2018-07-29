@@ -51,6 +51,7 @@ architecture struct of mips is
         alucontrol_B                 :   in  STD_LOGIC_VECTOR(2 downto 0);
         alucontrol_C                 :   in  STD_LOGIC_VECTOR(2 downto 0);
         zero_A, zero_B, zero_C       :   out STD_LOGIC;
+        PC_enable                    :   in  STD_LOGIC;
         pc                           :   buffer STD_LOGIC_VECTOR(31 downto 0);
         instr_A, instr_B, instr_C    :   in  STD_LOGIC_VECTOR(31 downto 0);
         aluout_A, aluout_B, aluout_C :   buffer STD_LOGIC_VECTOR(31 downto 0);
@@ -77,8 +78,16 @@ end component;
 
 component Hazard_Unit is
   port(
-    write_register_A, write_register_B, write_register_C:  in  STD_LOGIC_VECTOR(4 downto 0);
-    PC_enable: out STD_LOGIC
+    clk, reset: in STD_LOGIC;
+    dependencies: in STD_LOGIC_VECTOR(1 downto 0);
+    saida: out STD_LOGIC_VECTOR(3 downto 0)
+  );
+end component;
+
+component Comparator is
+  port(
+    A, B, C:  in  STD_LOGIC_VECTOR(4 downto 0);
+    result: out STD_LOGIC_VECTOR (1 downto 0)
   );
 end component;
 
@@ -99,7 +108,8 @@ component mux2 generic(width: integer);
   signal alu_data_b1, alu_data_b2: STD_LOGIC_VECTOR (31 downto 0);
   signal alu_data_c1, alu_data_c2: STD_LOGIC_VECTOR (31 downto 0);
   signal s_aluout_A, s_aluout_B,s_aluout_C: STD_LOGIC_VECTOR (31 downto 0);
-  signal PC_enable: STD_LOGIC;
+  signal dependencies: STD_LOGIC_VECTOR(1 downto 0);
+  signal stalls: STD_LOGIC_VECTOR(3 downto 0);
 
 begin
 
@@ -131,6 +141,7 @@ begin
         jump_A, jump_B, jump_C, 
         alucontrol_A, alucontrol_B, alucontrol_C, 
         zero_A, zero_B, zero_C, 
+        stalls(3),
         pc, 
         instr_A, instr_B, instr_C,
         s_aluout_A, s_aluout_B, s_aluout_C, 
@@ -152,7 +163,9 @@ begin
         alu_data_c1, alu_data_c2
     );
 
-    haz_unit: Hazard_Unit port map(writeReg_A, writeReg_B, writeReg_C, PC_enable);
+    haz_unit: Hazard_Unit port map(clk, reset, dependencies, saida);
+
+    comparator: Comparator port map(writeReg_A, writeReg_B, writeReg_C, dependencies);
 
     resmux_A: mux2 generic map(32) port map(s_aluout_A, readdata_A, memtoreg_A, writedata_A);
 
@@ -166,10 +179,17 @@ begin
 
     wrmux_C: mux2 generic map(5) port map(instr_C(20 downto 16), instr_C(15 downto 11), regdst_C, writeReg_C);
 
+    stall_mux_A: mux2 generic map(32) port map (instr_A, X"00000000", stalls(2), st_instr_A);
+
+    stall_mux_B: mux2 generic map(32) port map (instr_B, X"00000000", stalls(1), st_instr_B);
+
+    stall_mux_C: mux2 generic map(32) port map (instr_C, X"00000000", stalls(0), st_instr_C);
     
     writeDM_A <= alu_data_a2;
     writeDM_B <= alu_data_b2;
     writeDM_C <= alu_data_c2;
+
+
 
     aluout_A <= s_aluout_A;
     aluout_B <= s_aluout_B;
