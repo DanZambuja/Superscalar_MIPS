@@ -132,7 +132,7 @@ begin
 
     rf: Register_File port map(
         clk,
-        regwrite_A, regwrite_B, regdst_C,
+        regwrite_A, regwrite_B, regwrite_C,
         instr_A(25 downto 21), instr_A(20 downto 16),
         instr_B(25 downto 21), instr_B(20 downto 16),
         instr_C(25 downto 21), instr_C(20 downto 16),
