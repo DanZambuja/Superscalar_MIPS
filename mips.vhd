@@ -9,7 +9,8 @@ entity mips is -- single cycle MIPS processor
         memwrite_A, memwrite_B, memwrite_C           :  out STD_LOGIC;
         aluout_A, aluout_B, aluout_C                 :  out STD_LOGIC_VECTOR(31 downto 0);
         writedata_A, writedata_B, writedata_C        :  out STD_LOGIC_VECTOR(31 downto 0);
-        readdata_A, readdata_B, readdata_C           :  in  STD_LOGIC_VECTOR(31 downto 0)
+        readdata_A, readdata_B, readdata_C           :  in  STD_LOGIC_VECTOR(31 downto 0);
+        writeDM_A, writeDM_B, writeDM_C              :  out STD_LOGIC_VECTOR(31 downto 0)
     );
 end;
 
@@ -137,7 +138,7 @@ begin
         instr_B(25 downto 21), instr_B(20 downto 16),
         instr_C(25 downto 21), instr_C(20 downto 16),
         writeReg_A, writeReg_B, writeReg_C,
-        s_aluout_A, s_aluout_B, s_aluout_C,
+        writedata_A, writedata_B, writedata_C,
         alu_data_a1, alu_data_a2,
         alu_data_b1, alu_data_b2, 
         alu_data_c1, alu_data_c2
@@ -155,6 +156,10 @@ begin
 
     wrmux_C: mux2 generic map(5) port map(instr_C(20 downto 16), instr_C(15 downto 11), regdst_C, writeReg_C);
 
+    
+    writeDM_A <= alu_data_a2;
+    writeDM_B <= alu_data_b2;
+    writeDM_C <= alu_data_c2;
 
     aluout_A <= s_aluout_A;
     aluout_B <= s_aluout_B;
