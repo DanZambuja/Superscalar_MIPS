@@ -11,9 +11,8 @@ entity Hazard_Unit is
   );
 end;
 
-architecture struct of Hazard_Unit is
 
-architecture struct of Hazard_Unit_Controller is
+architecture struct of Hazard_Unit is
 type type_state is (init, stall_b, stall_c, stall_a_b, stall_a_c, stall_b_c, dont_stall, done);
 signal state   : type_state;
    
@@ -27,68 +26,68 @@ begin
 	elsif (clk'event and clk = '1') then
 		case state is
 			when init =>
-				if dependencies = '00' then
+				if dependencies = "00" then
 					state <= dont_stall;
-                elsif dependencies = '01' then
+                elsif dependencies = "01" then
                     state <= stall_b;
-                elsif dependencies = '10' then
+                elsif dependencies = "10" then
                     state <= stall_c;
-                elsif dependencies = '11' then
+                elsif dependencies = "11" then
                     state <= stall_b_c;
 				end if;
 
 			when stall_b =>	
-				if dependencies = '00' then -- should not land here
+				if dependencies = "00" then -- should not land here
 					state <= done;
-                elsif dependencies = '01' then
+                elsif dependencies = "01" then
                     state <= stall_a_c;
-                elsif dependencies = '10' then --  should not land here
+                elsif dependencies = "10" then --  should not land here
                     state <= done;
-                elsif dependencies = '11' then
+                elsif dependencies = "11" then
                     state <= done;
 				end if;
 
             when stall_c =>	
-				if dependencies = '00' then -- should not land here
+				if dependencies = "00" then -- should not land here
 					state <= done;
-                elsif dependencies = '01' then
+                elsif dependencies = "01" then
                     state <= done;
-                elsif dependencies = '10' then
+                elsif dependencies = "10" then
                     state <= stall_a_b;
-                elsif dependencies = '11' then
+                elsif dependencies = "11" then
                     state <= done;
 				end if;
 
             when stall_a_b =>	
-				if dependencies = '00' then
+				if dependencies = "00" then
 					state <= done;
-                elsif dependencies = '01' then
+                elsif dependencies = "01" then
                     state <= done;
-                elsif dependencies = '10' then
+                elsif dependencies = "10" then
                     state <= done;
-                elsif dependencies = '11' then
+                elsif dependencies = "11" then
                     state <= done;
 				end if;
 
             when stall_a_c =>	
-				if dependencies = '00' then
+				if dependencies = "00" then
 					state <= done;
-                elsif dependencies = '01' then
+                elsif dependencies = "01" then
                     state <= done;
-                elsif dependencies = '10' then
+                elsif dependencies = "10" then
                     state <= done;
-                elsif dependencies = '11' then
+                elsif dependencies = "11" then
                     state <= stall_a_b;
 				end if;
 
             when stall_b_c =>	
-				if dependencies = '00' then
+				if dependencies = "00" then
 					state <= dont_stall;
-                elsif dependencies = '01' then
+                elsif dependencies = "01" then
                     state <= stall_a_c;
-                elsif dependencies = '10' then
+                elsif dependencies = "10" then
                     state <= stall_c;
-                elsif dependencies = '11' then
+                elsif dependencies = "11" then
                     state <= stall_a_c;
 				end if;
 
@@ -96,7 +95,7 @@ begin
 				state <= init;
 
             when done =>	
-				staet <= init;
+				state <= init;
 		end case;
 	end if;
     end process;
@@ -104,6 +103,8 @@ begin
 	process (state)
 	begin
 		case state is
+            when init =>
+                saida <= "0111";
 			when stall_b =>
 				saida <= "0010";
 			when stall_c =>

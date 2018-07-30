@@ -110,6 +110,7 @@ component mux2 generic(width: integer);
   signal s_aluout_A, s_aluout_B,s_aluout_C: STD_LOGIC_VECTOR (31 downto 0);
   signal dependencies: STD_LOGIC_VECTOR(1 downto 0);
   signal stalls: STD_LOGIC_VECTOR(3 downto 0);
+  signal st_instr_A, st_instr_B, st_instr_C: STD_LOGIC_VECTOR(31 downto 0);
 
 begin
 
@@ -163,9 +164,9 @@ begin
         alu_data_c1, alu_data_c2
     );
 
-    haz_unit: Hazard_Unit port map(clk, reset, dependencies, saida);
+    haz_unit: Hazard_Unit port map(clk, reset, dependencies, stalls);
 
-    comparator: Comparator port map(writeReg_A, writeReg_B, writeReg_C, dependencies);
+    compare: Comparator port map(writeReg_A, writeReg_B, writeReg_C, dependencies);
 
     resmux_A: mux2 generic map(32) port map(s_aluout_A, readdata_A, memtoreg_A, writedata_A);
 

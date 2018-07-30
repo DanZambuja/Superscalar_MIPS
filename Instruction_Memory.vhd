@@ -25,7 +25,7 @@ begin
       mem(i) := (others => '0'); 
     end loop;
     index := 0; 
-    FILE_OPEN(mem_file, "C:/Users/danie/Desktop/Arq/Superscalar/src/memfile.dat", READ_MODE);
+    FILE_OPEN(mem_file, "C:/Users/JPFN/MIPSuperscalar/MIPSuperscalar.srcs/sources_1/new/memfile.dat", READ_MODE);
     while not endfile(mem_file) loop
       readline(mem_file, L);
       result := 0;
