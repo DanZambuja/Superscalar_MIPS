@@ -6,7 +6,7 @@ entity top is -- top-level design for testing
   port(
     clk, reset                                :   in     STD_LOGIC;
     writedata_A, writedata_B, writedata_C     :   buffer STD_LOGIC_VECTOR(31 downto 0);
-    dataadr_A, dataaddr_B, dataaddr_C         :   buffer STD_LOGIC_VECTOR(31 downto 0);
+    dataaddr_A, dataaddr_B, dataaddr_C        :   buffer STD_LOGIC_VECTOR(31 downto 0);
     memwrite_A, memwrite_B, memwrite_C        :   buffer STD_LOGIC;
     instruction_A, instruction_B, instruction_C : out STD_LOGIC_VECTOR(31 downto 0)
   );
@@ -21,7 +21,8 @@ end;
         memwrite_A, memwrite_B, memwrite_C           :  out STD_LOGIC;
         aluout_A, aluout_B, aluout_C                 :  out STD_LOGIC_VECTOR(31 downto 0);
         writedata_A, writedata_B, writedata_C        :  out STD_LOGIC_VECTOR(31 downto 0);
-        readdata_A, readdata_B, readdata_C           :  in  STD_LOGIC_VECTOR(31 downto 0)
+        readdata_A, readdata_B, readdata_C           :  in  STD_LOGIC_VECTOR(31 downto 0);
+        writeDM_A, writeDM_B, writeDM_C              :  out STD_LOGIC_VECTOR(31 downto 0)
       );
     end component;
 
@@ -43,6 +44,10 @@ end;
     end component;
 
     signal pc, instr_A, instr_B, instr_C, readdata_A, readdata_B, readdata_C: STD_LOGIC_VECTOR(31 downto 0);
+    signal s_memwrite_A, s_memwrite_B, s_memwrite_C : STD_LOGIC;
+    signal s_dataaddr_A, s_dataaddr_B, s_dataaddr_C : STD_LOGIC_VECTOR(31 downto 0);
+    signal s_writedata_A, s_writedata_B, s_writedata_C : STD_LOGIC_VECTOR(31 downto 0);
+    signal s_writeDM_A, s_writeDM_B, s_writeDM_C : STD_LOGIC_VECTOR(31 downto 0);
 
   begin
     
@@ -50,10 +55,11 @@ end;
     mips1: MIPS port map(
       clk, reset, pc, 
       instr_A, instr_B, instr_C, 
-      memwrite_A, memwrite_B, memwrite_C, 
-      dataadr_A, dataaddr_B, dataaddr_C, 
-      writedata_A, writedata_B, writedata_C, 
-      readdata_A, readdata_B, readdata_C
+      s_memwrite_A, s_memwrite_B, s_memwrite_C, 
+      s_dataaddr_A, s_dataaddr_B, s_dataaddr_C, 
+      s_writedata_A, s_writedata_B, s_writedata_C, 
+      readdata_A, readdata_B, readdata_C,
+      s_writeDM_A, s_writeDM_B, s_writeDM_C
     );
 
     -- pc(7 downto 2) is a way of limiting the number of instructions read from the instruction memory
@@ -63,11 +69,23 @@ end;
 
     dmem1: Data_Memory port map(
       clk, 
-      memwrite_A, memwrite_B, memwrite_C, 
-      dataadr_A, dataaddr_B, dataaddr_C, 
-      writedata_A, writedata_B, writedata_C, 
+      s_memwrite_A, s_memwrite_B, s_memwrite_C, 
+      s_dataaddr_A, s_dataaddr_B, s_dataaddr_C, 
+      s_writeDM_A, s_writeDM_B, s_writeDM_C, 
       readdata_A, readdata_B, readdata_C
     );
+
+    memwrite_A <= s_memwrite_A;
+    memwrite_B <= s_memwrite_B;
+    memwrite_C <= s_memwrite_C;
+
+    dataaddr_A <= s_dataaddr_A;
+    dataaddr_B <= s_dataaddr_B;
+    dataaddr_C <= s_dataaddr_C;
+
+    writedata_A <= s_writedata_A;
+    writedata_B <= s_writedata_B;
+    writedata_C <= s_writedata_C;
 
     instruction_A <= instr_A;
     instruction_B <= instr_B;
