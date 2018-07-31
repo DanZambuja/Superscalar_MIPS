@@ -43,13 +43,14 @@ end;
       );
     end component;
 
-    component flopr_en
-      port(
-        clk, reset: in  STD_LOGIC;
-        enable    : in  STD_LOGIC;
-        d         : in  STD_LOGIC_VECTOR(width-1 downto 0);
-        q         : out STD_LOGIC_VECTOR(width-1 downto 0)
-      );
+    component flopr_en 
+      generic(width: integer);
+        port(
+          clk, reset: in  STD_LOGIC;
+          enable    : in  STD_LOGIC;
+          d         : in  STD_LOGIC_VECTOR(width-1 downto 0);
+          q         : out STD_LOGIC_VECTOR(width-1 downto 0)
+        );
     end component;
 
     signal pc, instr_A, instr_B, instr_C, readdata_A, readdata_B, readdata_C: STD_LOGIC_VECTOR(31 downto 0);
@@ -85,11 +86,11 @@ end;
       readdata_A, readdata_B, readdata_C
     );
 
-    floper_en_InstrMemA: flopr_en generic map(32) port map (clk, reset, enable1, instr_A, flopr_instr_A);
+    floper_en_InstrMemA: flopr_en generic map(32) port map (clk, reset, '1', instr_A, flopr_instr_A);
 
-    floper_en_InstrMemB: flopr_en generic map(32) port map (clk, reset, enable2, instr_B, flopr_instr_B);
+    floper_en_InstrMemB: flopr_en generic map(32) port map (clk, reset, '1', instr_B, flopr_instr_B);
 
-    floper_en_InstrMemC: flopr_en generic map(32) port map (clk, reset, enable3, instr_C, flopr_instr_C);
+    floper_en_InstrMemC: flopr_en generic map(32) port map (clk, reset, '1', instr_C, flopr_instr_C);
 
     memwrite_A <= s_memwrite_A;
     memwrite_B <= s_memwrite_B;
