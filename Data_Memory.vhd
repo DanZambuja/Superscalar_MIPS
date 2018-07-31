@@ -1,5 +1,6 @@
 library IEEE; 
-use IEEE.STD_LOGIC_1164.all; use STD.TEXTIO.all;
+use IEEE.STD_LOGIC_1164.all; 
+use STD.TEXTIO.all;
 use IEEE.NUMERIC_STD_UNSIGNED.all; 
 
 entity Data_Memory is -- data memory
