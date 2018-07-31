@@ -90,7 +90,6 @@ component mux2 generic(width: integer);
       );
     end component;
 
-
   signal memtoreg_A, alusrc_A, regdst_A, regwrite_A, jump_A, pcsrc_A: STD_LOGIC;
   signal memtoreg_B, alusrc_B, regdst_B, regwrite_B, jump_B, pcsrc_B: STD_LOGIC;
   signal memtoreg_C, alusrc_C, regdst_C, regwrite_C, jump_C, pcsrc_C: STD_LOGIC;
@@ -104,7 +103,6 @@ component mux2 generic(width: integer);
   signal flopr_alu_data_a1, flopr_alu_data_a2: STD_LOGIC_VECTOR(31 downto 0);
   signal flopr_alu_data_b1, flopr_alu_data_b2: STD_LOGIC_VECTOR(31 downto 0);
   signal flopr_alu_data_c1, flopr_alu_data_c2: STD_LOGIC_VECTOR(31 downto 0);
-
 
 begin
 
@@ -139,9 +137,9 @@ begin
         pc, 
         instr_A, instr_B, instr_C,
         s_aluout_A, s_aluout_B, s_aluout_C, 
-        alu_data_a1, alu_data_a2,
-        alu_data_b1, alu_data_b2,
-        alu_data_c1, alu_data_c2
+        flopr_alu_data_a1, flopr_alu_data_a2,
+        flopr_alu_data_b1, flopr_alu_data_b2,
+        flopr_alu_data_c1, flopr_alu_data_c2
     );
 
     rf: Register_File port map(
@@ -172,16 +170,21 @@ begin
     floper_en_in_mipsA1: flopr_en generic map(32) port map (clk, reset, enable4, alu_data_a1, flopr_alu_data_a1);
     floper_en_in_mipsA2: flopr_en generic map(32) port map (clk, reset, enable4, alu_data_a2, flopr_alu_data_a2);
 
-    floper_en_in_mipsB1: flopr_en generic map(32) port map (clk, reset, enable4, alu_data_b1, flopr_alu_data_b1);
-    floper_en_in_mipsB2: flopr_en generic map(32) port map (clk, reset, enable4, alu_data_b2, flopr_alu_data_b2);
+    floper_en_in_mipsB1: flopr_en generic map(32) port map (clk, reset, enable5, alu_data_b1, flopr_alu_data_b1);
+    floper_en_in_mipsB2: flopr_en generic map(32) port map (clk, reset, enable5, alu_data_b2, flopr_alu_data_b2);
 
-    floper_en_in_mipsC1: flopr_en generic map(32) port map (clk, reset, enable4, alu_data_c1, flopr_alu_data_c1);
-    floper_en_in_mipsC2: flopr_en generic map(32) port map (clk, reset, enable4, alu_data_c2, flopr_alu_data_c2);
+    floper_en_in_mipsC1: flopr_en generic map(32) port map (clk, reset, enable6, alu_data_c1, flopr_alu_data_c1);
+    floper_en_in_mipsC2: flopr_en generic map(32) port map (clk, reset, enable6, alu_data_c2, flopr_alu_data_c2);
 
-    floper_en_out_mipsA: flopr_en generic map(32) port map (clk, reset, enable4);
-    floper_en_out_mipsB: flopr_en generic map(32) port map (clk, reset, enable4);
-    floper_en_out_mipsC: flopr_en generic map(32) port map (clk, reset, enable4);
+    
+    floper_en_out_mipsA1: flopr_en generic map(32) port map (clk, reset, open, open, open);
+    floper_en_out_mipsA2: flopr_en generic map(32) port map (clk, reset, open, open, open);
 
+    floper_en_out_mipsB1: flopr_en generic map(32) port map (clk, reset, open, open, open);
+    floper_en_out_mipsB2: flopr_en generic map(32) port map (clk, reset, open, open, open);
+    
+    floper_en_out_mipsC1: flopr_en generic map(32) port map (clk, reset, open, open, open);
+    floper_en_out_mipsC2: flopr_en generic map(32) port map (clk, reset, open, open, open);
     
     writeDM_A <= alu_data_a2;
     writeDM_B <= alu_data_b2;
