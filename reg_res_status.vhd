@@ -22,7 +22,7 @@ begin
     begin
         loop
             if reset = '1' then
-                table := (others => (others => '0'));
+                table := (others => (others => '1'));
             elsif clock'event and clock = '1' then 
                 if write_enable = '1' then 
                     table(to_integer(reg_sel)) := write_status;

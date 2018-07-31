@@ -3,7 +3,9 @@ use IEEE.STD_LOGIC_1164.all;
 use IEEE.STD_LOGIC_ARITH.all;
 
 entity scoreboard is
-
+    port(
+        clock, reset :  in  STD_LOGIC
+    );
 end scoreboard;
 
 architecture hierarchical of scoreboard is 
@@ -43,6 +45,13 @@ architecture hierarchical of scoreboard is
 
 begin
 
+    FU_stat :  FU_status port map (clock, reset);
+
+    instr_stat : instruction_status port map(clock, reset);
+
+    reg_status : reg_res_status port map(clock, reset);
+
+    
 
 
 end;
