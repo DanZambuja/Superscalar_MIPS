@@ -5,6 +5,7 @@ use IEEE.NUMERIC_STD_UNSIGNED.all;
 entity FU_status is
     port(
         clock         :  in  STD_LOGIC;
+        reset         :  in  STD_LOGIC;
         write_enable  :  in  STD_LOGIC;
         FU_sel        :  in  STD_LOGIC_VECTOR(1 downto 0);
         write_status  :  out STD_LOGIC_VECTOR(26 downto 0);
@@ -23,7 +24,9 @@ begin
         variable table : fu_table;
     begin
         loop
-            if clock'event and clock = '1' then 
+            if reset = '1' then
+                table := (others => (others => '0'));
+            elsif clock'event and clock = '1' then 
                 if write_enable = '1' then 
                     table(to_integer(FU_sel)) := write_status;
                 end if;

@@ -11,6 +11,7 @@ architecture hierarchical of scoreboard is
     component FU_status is
         port(
             clock         :  in  STD_LOGIC;
+            reset         :  in  STD_LOGIC;
             write_enable  :  in  STD_LOGIC;
             FU_sel        :  in  STD_LOGIC_VECTOR(1 downto 0);
             write_status  :  out STD_LOGIC_VECTOR(26 downto 0);
@@ -21,6 +22,7 @@ architecture hierarchical of scoreboard is
     component instruction_status is
         port(
             clock         :  in  STD_LOGIC;
+            reset         :  in  STD_LOGIC;
             write_enable  :  in  STD_LOGIC;
             instr_address :  in  STD_LOGIC_VECTOR(5 downto 0);
             write_status  :  in  STD_LOGIC_VECTOR(26 downto 0);
@@ -31,6 +33,7 @@ architecture hierarchical of scoreboard is
     component reg_res_status is
         port(
             clock         :  in  STD_LOGIC;
+            reset         :  in  STD_LOGIC;
             write_enable  :  in  STD_LOGIC;
             reg_sel       :  in  STD_LOGIC_VECTOR(4 downto 0);
             write_status  :  out STD_LOGIC_VECTOR(1 downto 0);
