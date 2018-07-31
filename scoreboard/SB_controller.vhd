@@ -33,61 +33,26 @@ begin
 				state <= issue;
 
 			when issue =>	
-				if free_fu /= "11" then 
+				if free_fu /= "11" then -- need to have at least 1 of them available
 					if write_status(to_integer(destination_register)) /= '0' then
                         state <= read_op;
                     end if;
 				end if;
 
-            when stall_c =>	
-				if dependencies = "00" then
-					state <= done;
-                elsif dependencies = "01" then
-                    state <= done;
-                elsif dependencies = "10" then
-                    state <= stall_a_b;
-                elsif dependencies = "11" then
-                    state <= done;
-				end if;
+            when read_op =>	
+				if write_status(to_integer(destination_register)) /= '0' then
+                        state <= exec;
+                end if;
 
-            when stall_a_b =>	
-				if dependencies = "00" then
-					state <= done;
-                elsif dependencies = "01" then
-                    state <= done;
-                elsif dependencies = "10" then
-                    state <= done;
-                elsif dependencies = "11" then
-                    state <= done;
-				end if;
+            when exec =>	
+				if done_exec = '1' then
+                    state <= write_back;
+                end if;
 
-            when stall_a_c =>	
-				if dependencies = "00" then
-					state <= done;
-                elsif dependencies = "01" then
-                    state <= done;
-                elsif dependencies = "10" then
-                    state <= done;
-                elsif dependencies = "11" then
-                    state <= stall_a_b;
-				end if;
-
-            when stall_b_c =>	
-				if dependencies = "00" then
-					state <= dont_stall;
-                elsif dependencies = "01" then
-                    state <= stall_a_c;
-                elsif dependencies = "10" then
-                    state <= stall_c;
-                elsif dependencies = "11" then
-                    state <= stall_a_c;
-				end if;
-
-            when dont_stall =>	
-				state <= init;
-
-            when done =>	
-				state <= init;
+            when write_back =>	
+				if done_wb then
+                    state <= issue;
+                end if;
 		end case;
 	end if;
     end process;
@@ -97,20 +62,14 @@ begin
 		case state is
             when init =>
                 saida <= "0111";
-			when stall_b =>
+			when issue =>
 				saida <= "0010";
-			when stall_c =>
+			when read_op =>
 				saida <= "0001";
-			when stall_a_b =>
+			when exec =>
 				saida <= "0110";
-			when stall_a_c =>
+			when write_back =>
 				saida <= "0101";
-            when stall_b_c =>
-				saida <= "0011";
-            when dont_stall =>
-				saida <= "1000";
-            when done =>
-				saida <= "1111";
 		end case;
    end process;
 end struct;
