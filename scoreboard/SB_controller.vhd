@@ -11,6 +11,8 @@ entity SB_Controller is
     destination_register: in STD_LOGIC_VECTOR(4 downto 0);
     source_register1, source_register2: in STD_LOGIC_VECTOR(4 downto 0);
     write_status: in STD_LOGIC_VECTOR(26 downto 0);
+    jump, immediate_instr: in STD_LOGIC;
+    done_exec: in STD_LOGIC;
     saida: out STD_LOGIC_VECTOR(3 downto 0)
   );
 end;
@@ -34,18 +36,22 @@ begin
 
 			when issue =>	
 				if free_fu /= "11" then -- need to have at least 1 of them available
-					if write_status(to_integer(destination_register)) /= '0' then
+					if write_status(to_integer(destination_register)) = '0' then
                         state <= read_op;
                     end if;
 				end if;
 
             when read_op =>	
-				if write_status(to_integer(destination_register)) /= '0' then
+				if write_status(to_integer(source_register1)) = '0' then
+                    if jump OR immediate_instr  then
                         state <= exec;
+                    elsif write_status(to_integer(source_register2)) = '0'
+                        state <= exec;
+                    end if;
                 end if;
 
             when exec =>	
-				if done_exec = '1' then
+				if done_exec then
                     state <= write_back;
                 end if;
 
